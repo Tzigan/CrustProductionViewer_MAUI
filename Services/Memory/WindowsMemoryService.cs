@@ -135,8 +135,8 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 ? stackalloc byte[size]
                 : new byte[size];
 
-            // Записываем значение в буфер
-            MemoryMarshal.Write(buffer, ref value);
+            // Записываем значение в буфер (используем in вместо ref)
+            MemoryMarshal.Write(buffer, in value);
 
             IntPtr bytesWritten;
             return NativeMethods.WriteProcessMemory(_processHandle, address,
@@ -159,7 +159,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             Span<byte> valueBytes = stackalloc byte[valueSize];
 
             // Записываем значение в буфер поиска
-            MemoryMarshal.Write(valueBytes, ref value);
+            MemoryMarshal.Write(valueBytes, in value);
 
             // Сканирование адресного пространства
             IntPtr currentAddress = sysInfo.lpMinimumApplicationAddress;
