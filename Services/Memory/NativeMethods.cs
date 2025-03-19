@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace CrustProductionViewer_MAUI.Services.Memory
 {
-    public static class NativeMethods
+    public static unsafe class NativeMethods
     {
         // Константы для доступа к процессу
         public const int PROCESS_VM_READ = 0x0010;
@@ -21,7 +22,31 @@ namespace CrustProductionViewer_MAUI.Services.Memory
         public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte* lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
+
+        // Метод-обертка для работы со Span<byte>
+        public static bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, Span<byte> lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead)
+        {
+            fixed (byte* ptr = lpBuffer)
+            {
+                return ReadProcessMemory(hProcess, lpBaseAddress, ptr, dwSize, out lpNumberOfBytesRead);
+            }
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, out IntPtr lpNumberOfBytesWritten);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte* lpBuffer, int nSize, out IntPtr lpNumberOfBytesWritten);
+
+        // Метод-обертка для работы с ReadOnlySpan<byte>
+        public static bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ReadOnlySpan<byte> lpBuffer, int nSize, out IntPtr lpNumberOfBytesWritten)
+        {
+            fixed (byte* ptr = lpBuffer)
+            {
+                return WriteProcessMemory(hProcess, lpBaseAddress, ptr, nSize, out lpNumberOfBytesWritten);
+            }
+        }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hObject);
