@@ -89,7 +89,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
             IntPtr bytesRead;
             bool result = NativeMethods.ReadProcessMemory(_processHandle, address,
-                MemoryMarshal.AsBytes(buffer), size, out bytesRead);
+                buffer, size, out bytesRead);
 
             if (!result || bytesRead.ToInt32() != size)
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
@@ -110,7 +110,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
             IntPtr bytesRead;
             bool result = NativeMethods.ReadProcessMemory(_processHandle, address,
-                MemoryMarshal.AsBytes(buffer), maxLength, out bytesRead);
+                buffer, maxLength, out bytesRead);
 
             if (!result)
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
@@ -140,7 +140,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
             IntPtr bytesWritten;
             return NativeMethods.WriteProcessMemory(_processHandle, address,
-                MemoryMarshal.AsBytes(buffer), size, out bytesWritten);
+                buffer, size, out bytesWritten);
         }
 
         public IEnumerable<IntPtr> ScanMemory<T>(T value) where T : struct
@@ -195,7 +195,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
                             IntPtr bytesRead;
                             if (NativeMethods.ReadProcessMemory(_processHandle, memInfo.BaseAddress,
-                                MemoryMarshal.AsBytes(buffer), regionSize, out bytesRead))
+                                buffer, regionSize, out bytesRead))
                             {
                                 // Получаем фактический размер прочитанных данных
                                 int actualBytesRead = bytesRead.ToInt32();
@@ -284,12 +284,12 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
                             IntPtr bytesRead;
                             if (NativeMethods.ReadProcessMemory(_processHandle, memInfo.BaseAddress,
-                                MemoryMarshal.AsBytes(buffer), regionSize, out bytesRead))
+                                buffer, regionSize, out bytesRead))
                             {
                                 // Получаем фактический размер прочитанных данных
                                 int actualBytesRead = bytesRead.ToInt32();
 
-                                // Эффективный поиск строки в буфере с использованием алгоритма Бойера-Мура
+                                // Эффективный поиск строки в буфере
                                 Span<byte> workBuffer = buffer.Slice(0, actualBytesRead);
                                 int limit = actualBytesRead - searchLength;
 
