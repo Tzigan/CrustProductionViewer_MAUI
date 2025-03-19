@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CrustProductionViewer_MAUI.Services.Memory
 {
-    public class WindowsMemoryService : IMemoryService, IDisposable
+    public partial class WindowsMemoryService : IMemoryService, IDisposable
     {
         private Process? _process;
         private IntPtr _processHandle = IntPtr.Zero;
