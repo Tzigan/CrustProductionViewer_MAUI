@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -13,7 +14,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Текущее производство
         /// </summary>
         [ObservableProperty]
-        private Production production;
+        private Production? production; // Изменено для разрешения null
 
         /// <summary>
         /// Балансы ресурсов
@@ -43,7 +44,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Текущая версия игры
         /// </summary>
         [ObservableProperty]
-        private string gameVersion;
+        private string gameVersion = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Создает баланс ресурсов на основе данных о производстве
@@ -175,7 +176,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="buildingType">Тип здания</param>
         /// <returns>Конфигурация или null, если не найдена</returns>
-        public BuildingConfig GetBuildingConfigByType(BuildingType buildingType)
+        public BuildingConfig? GetBuildingConfigByType(BuildingType buildingType) // Добавлен ? для явного указания возвращаемого null
         {
             return BuildingConfigs?.FirstOrDefault(bc => bc.BuildingType == buildingType);
         }
@@ -185,7 +186,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="buildingName">Имя здания</param>
         /// <returns>Конфигурация или null, если не найдена</returns>
-        public BuildingConfig GetBuildingConfigByName(string buildingName)
+        public BuildingConfig? GetBuildingConfigByName(string buildingName) // Добавлен ? для явного указания возвращаемого null
         {
             return BuildingConfigs?.FirstOrDefault(bc => bc.Name == buildingName);
         }
@@ -195,7 +196,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="resourceId">ID ресурса</param>
         /// <returns>Ресурс или null, если не найден</returns>
-        public GameResource GetResourceById(int resourceId)
+        public GameResource? GetResourceById(int resourceId) // Добавлен ? для явного указания возвращаемого null
         {
             return Production?.GetResourceById(resourceId);
         }
