@@ -55,6 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <MauiXaml Remove="Views\DebugPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
   </ItemGroup>
@@ -73,6 +77,12 @@
   <ItemGroup>
     <Folder Include="Resources\Images\game_icons\" />
     <Folder Include="Resources\Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Views\DebugPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

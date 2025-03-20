@@ -14,6 +14,7 @@ namespace CrustProductionViewer_MAUI
             Routing.RegisterRoute("main", typeof(Views.MainPage));
             Routing.RegisterRoute("scan", typeof(Views.ScanPage));
             Routing.RegisterRoute("calculator", typeof(Views.CalculatorPage));
+            Routing.RegisterRoute("debug", typeof(Views.DebugPage));
 
         }
         public static async Task DisplaySnackbarAsync(string message)

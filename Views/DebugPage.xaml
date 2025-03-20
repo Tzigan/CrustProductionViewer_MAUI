@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CrustProductionViewer_MAUI.Views.DebugPage"
+             Title="Отладка памяти">
+
+    <Grid RowDefinitions="Auto,*,Auto" 
+          Padding="20">
+
+        <!-- Заголовок и информация -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Режим отладки памяти"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="⚠️ Только для разработчиков! ⚠️"
+                   FontSize="16"
+                   TextColor="{DynamicResource Danger}"
+                   HorizontalOptions="Center" />
+
+            <Border StrokeShape="RoundRectangle 8"
+                    Stroke="{DynamicResource Primary}"
+                    Shadow="True"
+                    Padding="15"
+                    Margin="0,10,0,10">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                    <Label x:Name="ConnectionStatusLabel" 
+                           Grid.Column="0"
+                           Text="Статус подключения: неизвестно"
+                           FontSize="16"
+                           VerticalOptions="Center" />
+
+                    <Button x:Name="ConnectButton"
+                            Grid.Column="1"
+                            Text="Подключиться"
+                            Clicked="OnConnectClicked"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+
+        <!-- Основная зона со вкладками -->
+        <ScrollView Grid.Row="1" Margin="0,10,0,10">
+            <Border StrokeShape="RoundRectangle 8"
+                    Stroke="{DynamicResource Primary}"
+                    Padding="10">
+
+                <!-- Контент вкладок -->
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Селектор вкладок -->
+                    <HorizontalStackLayout Grid.Row="0" 
+                                           Spacing="0" 
+                                           HorizontalOptions="Center"
+                                           Margin="0,0,0,15">
+                        <Button Text="Тесты" 
+                                Clicked="OnTestTabClicked"
+                                x:Name="TestTabButton"
+                                BackgroundColor="{DynamicResource Primary}"
+                                TextColor="White"
+                                CornerRadius="10,0,0,10"
+                                Margin="0"
+                                Padding="15,10" />
+
+                        <Button Text="Сигнатуры" 
+                                Clicked="OnSignaturesTabClicked"
+                                x:Name="SignaturesTabButton"
+                                BackgroundColor="{DynamicResource Tertiary}"
+                                TextColor="White"
+                                CornerRadius="0"
+                                Margin="0"
+                                Padding="15,10" />
+
+                        <Button Text="Структуры" 
+                                Clicked="OnStructuresTabClicked"
+                                x:Name="StructuresTabButton"
+                                BackgroundColor="{DynamicResource Tertiary}"
+                                TextColor="White"
+                                CornerRadius="0,10,10,0"
+                                Margin="0"
+                                Padding="15,10" />
+                    </HorizontalStackLayout>
+
+                    <!-- Содержимое вкладок -->
+                    <Grid Grid.Row="1">
+                        <!-- Вкладка Тесты -->
+                        <VerticalStackLayout x:Name="TestTab" IsVisible="True" Spacing="15">
+                            <Label Text="Запуск тестов сканирования"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+
+                            <Button Text="Полное сканирование" 
+                                    Clicked="OnFullScanClicked"
+                                    BackgroundColor="{DynamicResource Primary}" />
+
+                            <Button Text="Быстрое обновление" 
+                                    Clicked="OnQuickUpdateClicked"
+                                    BackgroundColor="{DynamicResource Success}" />
+
+                            <Button Text="Очистить кэш адресов" 
+                                    Clicked="OnClearCacheClicked"
+                                    BackgroundColor="{DynamicResource Warning}" />
+
+                            <Button Text="Сохранить результаты в файл" 
+                                    Clicked="OnSaveResultsClicked"
+                                    BackgroundColor="{DynamicResource Info}" />
+
+                            <Label Text="Журнал операций:"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   Margin="0,10,0,0" />
+
+                            <Border StrokeShape="RoundRectangle 5"
+                                    Stroke="{DynamicResource Tertiary}"
+                                    Padding="10"
+                                    HeightRequest="200">
+                                <ScrollView>
+                                    <Label x:Name="LogOutput" 
+                                           Text="Журнал пуст. Запустите операцию для вывода результатов."
+                                           FontFamily="Courier New"
+                                           FontSize="12" />
+                                </ScrollView>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Вкладка Сигнатуры -->
+                        <VerticalStackLayout x:Name="SignaturesTab" IsVisible="False" Spacing="15">
+                            <Label Text="Тестирование сигнатур"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+
+                            <Label Text="Сигнатура списка ресурсов:"
+                                   FontSize="14"
+                                   FontAttributes="Bold" />
+
+                            <Entry x:Name="ResourceSignatureEntry"
+                                   Placeholder="48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 48 8B 40 ??"
+                                   FontFamily="Courier New"
+                                   Margin="0,0,0,10" />
+
+                            <Label Text="Маска сигнатуры ресурсов:"
+                                   FontSize="14"
+                                   FontAttributes="Bold" />
+
+                            <Entry x:Name="ResourceMaskEntry"
+                                   Placeholder="xxx????xxx?xxx?"
+                                   FontFamily="Courier New"
+                                   Margin="0,0,0,10" />
+
+                            <Button Text="Тестировать сигнатуру ресурсов" 
+                                    Clicked="OnTestResourceSignatureClicked"
+                                    BackgroundColor="{DynamicResource Primary}" />
+
+                            <Label Text="Сигнатура списка строений:"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   Margin="0,10,0,0" />
+
+                            <Entry x:Name="BuildingSignatureEntry"
+                                   Placeholder="48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 41 ??"
+                                   FontFamily="Courier New"
+                                   Margin="0,0,0,10" />
+
+                            <Label Text="Маска сигнатуры строений:"
+                                   FontSize="14"
+                                   FontAttributes="Bold" />
+
+                            <Entry x:Name="BuildingMaskEntry"
+                                   Placeholder="xxx????xxx?xxx?"
+                                   FontFamily="Courier New"
+                                   Margin="0,0,0,10" />
+
+                            <Button Text="Тестировать сигнатуру строений" 
+                                    Clicked="OnTestBuildingSignatureClicked"
+                                    BackgroundColor="{DynamicResource Primary}" />
+
+                            <Label Text="Результаты поиска:"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   Margin="0,10,0,0" />
+
+                            <Border StrokeShape="RoundRectangle 5"
+                                    Stroke="{DynamicResource Tertiary}"
+                                    Padding="10"
+                                    HeightRequest="150">
+                                <ScrollView>
+                                    <Label x:Name="SignatureResults" 
+                                           Text="Тестирование сигнатур не выполнялось."
+                                           FontFamily="Courier New"
+                                           FontSize="12" />
+                                </ScrollView>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Вкладка Структуры -->
+                        <VerticalStackLayout x:Name="StructuresTab" IsVisible="False" Spacing="15">
+                            <Label Text="Тестирование структур данных"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+
+                            <Label Text="Адрес для чтения (в формате 0x...):"
+                                   FontSize="14"
+                                   FontAttributes="Bold" />
+
+                            <Entry x:Name="AddressEntry"
+                                   Placeholder="0x12AB34CD"
+                                   FontFamily="Courier New"
+                                   Margin="0,0,0,10" />
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <Button Text="Прочитать как ресурс" 
+                                        Clicked="OnReadAsResourceClicked"
+                                        BackgroundColor="{DynamicResource Primary}"
+                                        Grid.Column="0" />
+
+                                <Button Text="Прочитать как строение" 
+                                        Clicked="OnReadAsBuildingClicked"
+                                        BackgroundColor="{DynamicResource Success}"
+                                        Grid.Column="1" />
+                            </Grid>
+
+                            <Label Text="Смещения структуры ресурса:"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   Margin="0,10,0,0" />
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5" ColumnSpacing="10">
+                                <Label Text="Id:" Grid.Row="0" Grid.Column="0" />
+                                <Entry x:Name="ResourceIdOffset" Text="0x00" Grid.Row="0" Grid.Column="1" />
+
+                                <Label Text="NamePtr:" Grid.Row="1" Grid.Column="0" />
+                                <Entry x:Name="ResourceNameOffset" Text="0x08" Grid.Row="1" Grid.Column="1" />
+
+                                <Label Text="CurrentAmount:" Grid.Row="2" Grid.Column="0" />
+                                <Entry x:Name="ResourceAmountOffset" Text="0x10" Grid.Row="2" Grid.Column="1" />
+
+                                <Label Text="MaxCapacity:" Grid.Row="3" Grid.Column="0" />
+                                <Entry x:Name="ResourceCapacityOffset" Text="0x18" Grid.Row="3" Grid.Column="1" />
+
+                                <Label Text="ProductionRate:" Grid.Row="4" Grid.Column="0" />
+                                <Entry x:Name="ResourceProdOffset" Text="0x20" Grid.Row="4" Grid.Column="1" />
+
+                                <Label Text="ConsumptionRate:" Grid.Row="5" Grid.Column="0" />
+                                <Entry x:Name="ResourceConsOffset" Text="0x28" Grid.Row="5" Grid.Column="1" />
+                            </Grid>
+
+                            <Button Text="Применить изменения смещений" 
+                                    Clicked="OnApplyOffsetsClicked"
+                                    BackgroundColor="{DynamicResource Warning}"
+                                    Margin="0,10,0,0" />
+
+                            <Label Text="Результаты чтения структуры:"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   Margin="0,10,0,0" />
+
+                            <Border StrokeShape="RoundRectangle 5"
+                                    Stroke="{DynamicResource Tertiary}"
+                                    Padding="10"
+                                    HeightRequest="150">
+                                <ScrollView>
+                                    <Label x:Name="StructureResults" 
+                                           Text="Чтение структуры не выполнялось."
+                                           FontFamily="Courier New"
+                                           FontSize="12" />
+                                </ScrollView>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+        </ScrollView>
+
+        <!-- Нижний статус-бар и кнопки -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+            <Label x:Name="StatusLabel"
+                   Text="Готов к отладке"
+                   Grid.Column="0" Grid.Row="0"
+                   TextColor="{DynamicResource Info}" />
+
+            <ActivityIndicator x:Name="BusyIndicator"
+                              IsRunning="False"
+                              IsVisible="False"
+                              Grid.Column="1" Grid.Row="0"
+                              HeightRequest="24"
+                              WidthRequest="24" />
+
+            <Button Text="Закрыть режим отладки"
+                    Clicked="OnCloseDebugClicked"
+                    BackgroundColor="{DynamicResource Secondary}"
+                    Grid.ColumnSpan="2" Grid.Row="1"
+                    Margin="0,10,0,0" />
+        </Grid>
+    </Grid>
+</ContentPage>
