@@ -19,13 +19,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Название строения
         /// </summary>
         [ObservableProperty]
-        private string name;
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание строения
         /// </summary>
         [ObservableProperty]
-        private string description;
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Тип строения
@@ -67,7 +67,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Путь к иконке строения
         /// </summary>
         [ObservableProperty]
-        private string iconPath;
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Адрес в памяти для данных этого строения
@@ -97,13 +97,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Причина неактивности строения (если есть)
         /// </summary>
         [ObservableProperty]
-        private string inactiveReason;
+        private string inactiveReason = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Расположение строения (координаты)
         /// </summary>
         [ObservableProperty]
-        private BuildingLocation location;
+        private BuildingLocation location = new(); // Инициализация новым экземпляром
 
         /// <summary>
         /// Фактическая эффективность с учетом всех факторов
