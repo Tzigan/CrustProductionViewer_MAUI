@@ -46,7 +46,7 @@ namespace CrustProductionViewer_MAUI.Views
             // Обновляем информацию о последнем сканировании
             if (_dataService.LastScanTime.HasValue)
             {
-                ScanStatusLabel.Text = $"Последнее сканирование: {_dataService.LastScanTime.Value.ToString("g")}";
+                ScanStatusLabel.Text = $"Последнее сканирование: {_dataService.LastScanTime.Value:g}";
             }
             else
             {
@@ -247,7 +247,10 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private Border CreateResourceElement(GameResource resource)
+        /// <summary>
+        /// Создает элемент UI для отображения информации о ресурсе
+        /// </summary>
+        private static Border CreateResourceElement(GameResource resource)
         {
             var border = new Border
             {
@@ -260,15 +263,15 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-                },
+        {
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+        },
                 RowDefinitions =
-                {
-                    new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Auto }
-                }
+        {
+            new RowDefinition { Height = GridLength.Auto },
+            new RowDefinition { Height = GridLength.Auto }
+        }
             };
 
             var nameLabel = new Label
@@ -306,7 +309,10 @@ namespace CrustProductionViewer_MAUI.Views
             return border;
         }
 
-        private Border CreateBuildingElement(Building building)
+        /// <summary>
+        /// Создает элемент UI для отображения информации о здании
+        /// </summary>
+        private static Border CreateBuildingElement(Building building)
         {
             var border = new Border
             {
@@ -319,16 +325,16 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-                },
+        {
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+        },
                 RowDefinitions =
-                {
-                    new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Auto }
-                }
+        {
+            new RowDefinition { Height = GridLength.Auto },
+            new RowDefinition { Height = GridLength.Auto },
+            new RowDefinition { Height = GridLength.Auto }
+        }
             };
 
             var nameLabel = new Label

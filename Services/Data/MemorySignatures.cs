@@ -6,13 +6,13 @@
     public static class MemorySignatures
     {
         // Сигнатуры для поиска списка ресурсов
-        public static readonly byte[] ResourceListSignature = new byte[]
-        {
+        public static readonly byte[] ResourceListSignature =
+        [
             0x48, 0x8B, 0x05, 0x00, 0x00, 0x00, 0x00,   // MOV RAX, [RIP + offset]
             0x48, 0x85, 0xC0,                           // TEST RAX, RAX
             0x74, 0x00,                                 // JZ short
             0x48, 0x8B, 0x40, 0x00                      // MOV RAX, [RAX + offset]
-        };
+        ];
         public static readonly string ResourceListMask = "xxx????xxx?xxx?";
 
         // Смещение от сигнатуры до указателя на список ресурсов
@@ -32,13 +32,13 @@
         }
 
         // Сигнатуры для поиска списка строений
-        public static readonly byte[] BuildingListSignature = new byte[]
-        {
+        public static readonly byte[] BuildingListSignature =
+        [
             0x48, 0x8B, 0x0D, 0x00, 0x00, 0x00, 0x00,   // MOV RCX, [RIP + offset]
             0x48, 0x85, 0xC9,                           // TEST RCX, RCX
             0x74, 0x00,                                 // JZ short
             0x48, 0x8B, 0x41, 0x00                      // MOV RAX, [RCX + offset]
-        };
+        ];
         public static readonly string BuildingListMask = "xxx????xxx?xxx?";
 
         // Смещение от сигнатуры до указателя на список строений

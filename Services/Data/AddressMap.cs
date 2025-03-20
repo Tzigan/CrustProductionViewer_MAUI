@@ -44,12 +44,12 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <summary>
         /// Словарь адресов ресурсов по их ID
         /// </summary>
-        public Dictionary<int, long> ResourceAddresses { get; set; } = new Dictionary<int, long>();
+        public Dictionary<int, long> ResourceAddresses { get; set; } = [];
 
         /// <summary>
         /// Словарь адресов строений по их ID
         /// </summary>
-        public Dictionary<int, long> BuildingAddresses { get; set; } = new Dictionary<int, long>();
+        public Dictionary<int, long> BuildingAddresses { get; set; } = [];
 
         /// <summary>
         /// Проверяет, содержит ли карта адресов базовые данные

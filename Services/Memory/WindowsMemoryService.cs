@@ -146,12 +146,12 @@ namespace CrustProductionViewer_MAUI.Services.Memory
         public List<IntPtr> FindPattern(byte[] pattern, string mask)
         {
             if (!IsConnected || GameProcess == null)
-                return new List<IntPtr>();
+                return [];
 
             if (pattern.Length != mask.Length)
                 throw new ArgumentException("Длина шаблона и маски должны совпадать");
 
-            List<IntPtr> results = new List<IntPtr>();
+            List<IntPtr> results = [];
 
             try
             {

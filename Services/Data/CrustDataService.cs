@@ -17,7 +17,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
     public class CrustDataService : ICrustDataService
     {
         private readonly WindowsMemoryService _memoryService;
-        private AddressMap _addressMap = new AddressMap();
+        private AddressMap _addressMap = new();
         private GameData _gameData;
         private DateTime? _lastScanTime;
         private string _gameProcess = "TheCrust";
@@ -320,7 +320,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
             try
             {
                 // Получаем указатель на список ресурсов
-                IntPtr resourceListPtr = new IntPtr(_addressMap.ResourceListAddress);
+                IntPtr resourceListPtr = new(_addressMap.ResourceListAddress);
 
                 // Читаем указатель на список ресурсов (дважды разыменовываем)
                 IntPtr resourceArrayPtr = _memoryService.Read<IntPtr>(resourceListPtr);
@@ -442,7 +442,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
             try
             {
                 // Получаем указатель на список строений
-                IntPtr buildingListPtr = new IntPtr(_addressMap.BuildingListAddress);
+                IntPtr buildingListPtr = new(_addressMap.BuildingListAddress);
 
                 // Читаем указатель на список строений (дважды разыменовываем)
                 IntPtr buildingArrayPtr = _memoryService.Read<IntPtr>(buildingListPtr);
@@ -565,7 +565,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                             IntPtr productionPtr = _memoryService.Read<IntPtr>(IntPtr.Add(producedArrayPtr, i * 8));
                             if (productionPtr != IntPtr.Zero)
                             {
-                                ResourceProduction production = new ResourceProduction
+                                ResourceProduction production = new()
                                 {
                                     ResourceId = _memoryService.Read<int>(IntPtr.Add(productionPtr, 0)),
                                     BaseProductionRate = _memoryService.Read<double>(IntPtr.Add(productionPtr, 8)),
@@ -592,7 +592,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                             IntPtr consumptionPtr = _memoryService.Read<IntPtr>(IntPtr.Add(consumedArrayPtr, i * 8));
                             if (consumptionPtr != IntPtr.Zero)
                             {
-                                ResourceConsumption consumption = new ResourceConsumption
+                                ResourceConsumption consumption = new()
                                 {
                                     ResourceId = _memoryService.Read<int>(IntPtr.Add(consumptionPtr, 0)),
                                     BaseConsumptionRate = _memoryService.Read<double>(IntPtr.Add(consumptionPtr, 8)),
@@ -702,7 +702,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                 int resourceId = entry.Key;
                 long resourceAddress = entry.Value;
 
-                IntPtr resourcePtr = new IntPtr(resourceAddress);
+                IntPtr resourcePtr = new(resourceAddress);
 
                 // Проверяем, что адрес валиден
                 try
@@ -760,7 +760,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                 int buildingId = entry.Key;
                 long buildingAddress = entry.Value;
 
-                IntPtr buildingPtr = new IntPtr(buildingAddress);
+                IntPtr buildingPtr = new(buildingAddress);
 
                 // Проверяем, что адрес валиден
                 try
@@ -910,9 +910,11 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// </summary>
         public void ClearAddressCache()
         {
-            _addressMap = new AddressMap();
-            _addressMap.GameVersion = _gameData.GameVersion;
-            _addressMap.CreationTime = DateTime.Now;
+            _addressMap = new AddressMap
+            {
+                GameVersion = _gameData.GameVersion,
+                CreationTime = DateTime.Now
+            };
 
             // Сохраняем информацию о базовом модуле
             if (IsConnected && _memoryService.GameProcess != null)
