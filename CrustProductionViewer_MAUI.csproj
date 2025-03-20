@@ -76,12 +76,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\DebugPage.xaml.cs">
-      <DependentUpon>DebugPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <MauiXaml Update="Resources\Styles\DefaultTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
