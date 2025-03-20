@@ -20,7 +20,7 @@ namespace CrustProductionViewer_MAUI
         }
 
         // Переопределяем метод создания окна
-        protected override Window CreateWindow(IActivationState activationState)
+        protected override Window CreateWindow(IActivationState? activationState)
         {
             Window window = base.CreateWindow(activationState);
 
@@ -64,4 +64,3 @@ namespace CrustProductionViewer_MAUI
         }
     }
 }
-
