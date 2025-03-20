@@ -456,7 +456,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string addressText = AddressEntry.Text?.Trim();
+            string? addressText = AddressEntry.Text?.Trim();
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -584,7 +584,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string addressText = AddressEntry.Text?.Trim();
+            string? addressText = AddressEntry.Text?.Trim();
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -649,7 +649,7 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private void SetBusy(bool isBusy, string statusMessage = null)
+        private void SetBusy(bool isBusy, string? statusMessage = null)
         {
             _isBusy = isBusy;
             BusyIndicator.IsRunning = isBusy;
@@ -690,10 +690,22 @@ namespace CrustProductionViewer_MAUI.Views
             return sb.ToString();
         }
 
-        private byte[] HexStringToByteArray(string hex)
+        private byte[] HexStringToByteArray(string? hex)
         {
-            // Удаляем все пробелы
+            // Проверка на null или пустую строку
+            if (string.IsNullOrEmpty(hex))
+            {
+                throw new ArgumentException("Шестнадцатеричная строка не может быть пустой или null", nameof(hex));
+            }
+
+            // Удаляем все пробелы и другие символы форматирования
             hex = hex.Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("\n", "");
+
+            // Проверяем, что строка не пустая после удаления пробелов
+            if (string.IsNullOrEmpty(hex))
+            {
+                throw new ArgumentException("Шестнадцатеричная строка содержит только пробелы", nameof(hex));
+            }
 
             // Преобразуем строку в байты
             if (hex.Length % 2 != 0)
@@ -701,13 +713,25 @@ namespace CrustProductionViewer_MAUI.Views
                 throw new ArgumentException("Строка шестнадцатеричных символов должна иметь четное количество цифр");
             }
 
-            byte[] bytes = new byte[hex.Length / 2];
-            for (int i = 0; i < hex.Length; i += 2)
+            // Проверяем, что строка содержит только шестнадцатеричные символы
+            if (!System.Text.RegularExpressions.Regex.IsMatch(hex, "^[0-9A-Fa-f]+$"))
             {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                throw new ArgumentException("Строка содержит недопустимые символы. Разрешены только шестнадцатеричные символы (0-9, A-F)", nameof(hex));
             }
 
-            return bytes;
+            try
+            {
+                byte[] bytes = new byte[hex.Length / 2];
+                for (int i = 0; i < hex.Length; i += 2)
+                {
+                    bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                }
+                return bytes;
+            }
+            catch (FormatException ex)
+            {
+                throw new ArgumentException("Ошибка при преобразовании шестнадцатеричной строки в байты", ex);
+            }
         }
 
         private IntPtr CalculateAddressFromSignature(IntPtr signatureAddress, int offset)
