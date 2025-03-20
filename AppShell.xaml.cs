@@ -18,7 +18,7 @@ namespace CrustProductionViewer_MAUI
         }
         public static async Task DisplaySnackbarAsync(string message)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource = new();
 
             var snackbarOptions = new SnackbarOptions
             {

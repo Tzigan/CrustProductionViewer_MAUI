@@ -40,7 +40,7 @@ namespace CrustProductionViewer_MAUI.Views
             }
 
             LastScanLabel.Text = lastScan.HasValue
-                ? $"Последнее сканирование: {lastScan.Value.ToString("g")}"
+                ? $"Последнее сканирование: {lastScan.Value:g}"
                 : "Последнее сканирование: никогда";
         }
 
