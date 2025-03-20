@@ -317,7 +317,7 @@ namespace CrustProductionViewer_MAUI.Views
                 }
                 else
                 {
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new();
                     sb.AppendLine($"Найдено совпадений: {results.Count}");
 
                     int maxToShow = Math.Min(results.Count, 10);
@@ -396,7 +396,7 @@ namespace CrustProductionViewer_MAUI.Views
                 }
                 else
                 {
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new();
                     sb.AppendLine($"Найдено совпадений: {results.Count}");
 
                     int maxToShow = Math.Min(results.Count, 10);
@@ -472,7 +472,7 @@ namespace CrustProductionViewer_MAUI.Views
                 IntPtr address;
                 if (addressText.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
                 {
-                    address = new IntPtr(Convert.ToInt64(addressText.Substring(2), 16));
+                    address = new IntPtr(Convert.ToInt64(addressText[2..], 16));
                 }
                 else
                 {
@@ -485,7 +485,7 @@ namespace CrustProductionViewer_MAUI.Views
                     MemoryAddress = address
                 };
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 sb.AppendLine($"Чтение ресурса по адресу: 0x{address.ToInt64():X}\n");
 
                 // Читаем ID
@@ -678,7 +678,7 @@ namespace CrustProductionViewer_MAUI.Views
 
         private string ByteArrayToHexString(byte[] bytes)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             for (int i = 0; i < bytes.Length; i++)
             {
                 sb.Append(bytes[i].ToString("X2"));
@@ -766,7 +766,7 @@ namespace CrustProductionViewer_MAUI.Views
                         return 0;
                     }
 
-                    return Convert.ToInt32(hexOffset.Substring(2), 16);
+                    return Convert.ToInt32(hexOffset[2..], 16);
                 }
                 else
                 {
