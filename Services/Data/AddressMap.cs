@@ -12,6 +12,19 @@ namespace CrustProductionViewer_MAUI.Services.Data
     public class AddressMap
     {
         /// <summary>
+        /// Статические настройки сериализации JSON
+        /// </summary>
+        private static readonly JsonSerializerOptions _serializerOptions = new()
+        {
+            WriteIndented = true
+        };
+
+        /// <summary>
+        /// Статические настройки десериализации JSON
+        /// </summary>
+        private static readonly JsonSerializerOptions _deserializerOptions = new();
+
+        /// <summary>
         /// Версия игры, для которой сохранена карта адресов
         /// </summary>
         public string GameVersion { get; set; } = string.Empty;
@@ -64,10 +77,21 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// Получает относительный адрес из абсолютного
         /// </summary>
         /// <param name="absoluteAddress">Абсолютный адрес в памяти</param>
+        /// <param name="baseModuleAddress">Базовый адрес модуля</param>
+        /// <returns>Относительный адрес от базового адреса модуля</returns>
+        public static long GetRelativeAddress(long absoluteAddress, long baseModuleAddress)
+        {
+            return absoluteAddress - baseModuleAddress;
+        }
+
+        /// <summary>
+        /// Получает относительный адрес из абсолютного
+        /// </summary>
+        /// <param name="absoluteAddress">Абсолютный адрес в памяти</param>
         /// <returns>Относительный адрес от базового адреса модуля</returns>
         public long GetRelativeAddress(long absoluteAddress)
         {
-            return absoluteAddress - BaseModuleAddress;
+            return GetRelativeAddress(absoluteAddress, BaseModuleAddress);
         }
 
         /// <summary>
@@ -76,9 +100,19 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <param name="relativeAddress">Относительный адрес от базового адреса модуля</param>
         /// <param name="currentBaseAddress">Текущий базовый адрес модуля</param>
         /// <returns>Абсолютный адрес в памяти</returns>
-        public long GetAbsoluteAddress(long relativeAddress, long currentBaseAddress)
+        public static long GetAbsoluteAddress(long relativeAddress, long currentBaseAddress)
         {
             return relativeAddress + currentBaseAddress;
+        }
+
+        /// <summary>
+        /// Получает абсолютный адрес из относительного
+        /// </summary>
+        /// <param name="relativeAddress">Относительный адрес от базового адреса модуля</param>
+        /// <returns>Абсолютный адрес в памяти</returns>
+        public long GetAbsoluteAddress(long relativeAddress)
+        {
+            return GetAbsoluteAddress(relativeAddress, BaseModuleAddress);
         }
 
         /// <summary>
@@ -90,8 +124,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
         {
             try
             {
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string jsonString = JsonSerializer.Serialize(this, options);
+                string jsonString = JsonSerializer.Serialize(this, _serializerOptions);
                 await File.WriteAllTextAsync(filePath, jsonString);
                 return true;
             }
@@ -114,7 +147,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                     return null;
 
                 string jsonString = await File.ReadAllTextAsync(filePath);
-                return JsonSerializer.Deserialize<AddressMap>(jsonString);
+                return JsonSerializer.Deserialize<AddressMap>(jsonString, _deserializerOptions);
             }
             catch (Exception)
             {
@@ -136,8 +169,9 @@ namespace CrustProductionViewer_MAUI.Services.Data
         }
 
         /// <summary>
-        /// 
+        /// Копирует данные из другого экземпляра AddressMap
         /// </summary>
+        /// <param name="other">Объект AddressMap, из которого копируются данные</param>
         public void CopyFrom(AddressMap other)
         {
             if (other == null)
@@ -162,6 +196,5 @@ namespace CrustProductionViewer_MAUI.Services.Data
                 BuildingAddresses[kvp.Key] = kvp.Value;
             }
         }
-
     }
 }
