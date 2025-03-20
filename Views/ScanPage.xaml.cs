@@ -1,4 +1,5 @@
-using CrustProductionViewer_MAUI.Services.Memory;
+using CrustProductionViewer_MAUI.Models;
+using CrustProductionViewer_MAUI.Services.Data;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using System;
@@ -8,15 +9,13 @@ namespace CrustProductionViewer_MAUI.Views
 {
     public partial class ScanPage : ContentPage
     {
-        private readonly WindowsMemoryService _memoryService;
-        private bool _isConnected = false;
+        private readonly ICrustDataService _dataService;
+        private bool _isScanningActive = false;
 
-        public ScanPage(WindowsMemoryService memoryService)
+        public ScanPage(ICrustDataService dataService)
         {
             InitializeComponent();
-
-            // Получаем сервис из DI
-            _memoryService = memoryService;
+            _dataService = dataService;
         }
 
         protected override void OnAppearing()
@@ -27,36 +26,43 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void UpdateConnectionStatus()
         {
-            _isConnected = _memoryService?.IsConnected ?? false;
+            bool isConnected = _dataService.IsConnected;
 
-            if (_isConnected)
+            if (isConnected)
             {
                 ConnectionStatusLabel.Text = "Подключено к процессу The Crust";
-                ConnectionStatusLabel.TextColor = Colors.Green;
+                ConnectionStatusLabel.TextColor = Color.FromArgb("#FF059669"); // Success color
                 ConnectButton.Text = "Отключиться";
                 ScanButton.IsEnabled = true;
             }
             else
             {
                 ConnectionStatusLabel.Text = "Процесс The Crust не найден";
-                ConnectionStatusLabel.TextColor = Colors.Red;
+                ConnectionStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
                 ConnectButton.Text = "Подключиться";
                 ScanButton.IsEnabled = false;
+            }
+
+            // Обновляем информацию о последнем сканировании
+            if (_dataService.LastScanTime.HasValue)
+            {
+                ScanStatusLabel.Text = $"Последнее сканирование: {_dataService.LastScanTime.Value.ToString("g")}";
+            }
+            else
+            {
+                ScanStatusLabel.Text = "Для начала сканирования подключитесь к игре";
             }
         }
 
         private async void OnConnectClicked(object sender, EventArgs e)
         {
-            if (_memoryService == null)
-            {
-                await DisplayAlert("Ошибка", "Сервис работы с памятью не инициализирован", "OK");
+            if (_isScanningActive)
                 return;
-            }
 
-            if (_isConnected)
+            if (_dataService.IsConnected)
             {
                 // Отключаемся от процесса
-                _memoryService.Disconnect();
+                _dataService.Disconnect();
                 UpdateConnectionStatus();
                 return;
             }
@@ -68,7 +74,7 @@ namespace CrustProductionViewer_MAUI.Views
             try
             {
                 // Пытаемся подключиться к процессу
-                bool connected = await Task.Run(() => _memoryService.Connect("TheCrust"));
+                bool connected = await _dataService.ConnectAsync();
 
                 if (connected)
                 {
@@ -94,27 +100,43 @@ namespace CrustProductionViewer_MAUI.Views
 
         private async void OnScanClicked(object sender, EventArgs e)
         {
-            if (!_isConnected || _memoryService == null)
+            if (_isScanningActive || !_dataService.IsConnected)
             {
-                await DisplayAlert("Ошибка", "Сначала подключитесь к игре", "OK");
+                await DisplayAlert("Информация", "Сканирование уже выполняется или отсутствует подключение к игре", "OK");
                 return;
             }
 
             // Отключаем кнопки и показываем индикатор загрузки
+            _isScanningActive = true;
             ScanButton.IsEnabled = false;
             ConnectButton.IsEnabled = false;
             ScanningIndicator.IsVisible = true;
             ScanningIndicator.IsRunning = true;
-            ScanStatusLabel.Text = "Сканирование памяти...";
+            ResultsLabel.Text = "Выполняется сканирование...";
 
             try
             {
-                // Здесь будет реализация сканирования памяти
-                await Task.Delay(2000); // Имитация процесса сканирования
+                // Создаем объект для отслеживания прогресса
+                var progress = new Progress<ScanProgress>(OnScanProgressChanged);
 
-                // Пока используем заглушку
-                ResultsLabel.Text = "Сканирование завершено. Найдено: 0 ресурсов, 0 зданий";
-                await DisplayAlert("Информация", "Функция сканирования находится в разработке. Будет доступна в следующей версии.", "OK");
+                // Запускаем сканирование
+                var gameData = await _dataService.ScanDataAsync(progress);
+
+                // Отображаем результаты
+                if (gameData.Production.Resources.Count > 0 || gameData.Production.Buildings.Count > 0)
+                {
+                    ResultsLabel.Text = $"Сканирование завершено. Найдено: {gameData.Production.Resources.Count} ресурсов, {gameData.Production.Buildings.Count} зданий";
+
+                    // Отображаем найденные ресурсы
+                    await DisplayResourcesAsync(gameData);
+
+                    // Отображаем найденные здания
+                    await DisplayBuildingsAsync(gameData);
+                }
+                else
+                {
+                    ResultsLabel.Text = "Сканирование не нашло данных. Попробуйте запустить игру и повторить попытку.";
+                }
             }
             catch (Exception ex)
             {
@@ -124,22 +146,105 @@ namespace CrustProductionViewer_MAUI.Views
             finally
             {
                 // Восстанавливаем UI
+                _isScanningActive = false;
                 ScanButton.IsEnabled = true;
                 ConnectButton.IsEnabled = true;
                 ScanningIndicator.IsVisible = false;
                 ScanningIndicator.IsRunning = false;
-                ScanStatusLabel.Text = "Сканирование завершено";
+                UpdateConnectionStatus();
             }
         }
 
-        // Метод для создания элемента ресурса (будет использоваться позже)
-        // Метод для создания элемента ресурса (будет использоваться позже)
-        private Border CreateResourceFrame(string name, double amount, double capacity, double production)
+        private void OnScanProgressChanged(ScanProgress progress)
+        {
+            // Обновляем UI в соответствии с прогрессом сканирования
+            ScanStatusLabel.Text = progress.Message;
+
+            // Обновляем текст результата в зависимости от этапа
+            if (progress.Stage == ScanStage.Failed)
+            {
+                ResultsLabel.Text = $"Ошибка: {progress.Message}";
+            }
+            else if (progress.Stage != ScanStage.Completed)
+            {
+                ResultsLabel.Text = $"Сканирование ({progress.PercentComplete}%): {progress.Message}";
+            }
+
+            // Отображаем количество найденных ресурсов и зданий
+            if (progress.ResourcesFound > 0 || progress.BuildingsFound > 0)
+            {
+                ResultsLabel.Text += $"\nНайдено: {progress.ResourcesFound} ресурсов, {progress.BuildingsFound} зданий";
+            }
+        }
+
+        private async Task DisplayResourcesAsync(GameData gameData)
+        {
+            // Очищаем контейнер
+            ResourcesStack.Children.Clear();
+
+            if (gameData.Production.Resources.Count > 0)
+            {
+                ResourcesStack.IsVisible = true;
+
+                // Добавляем заголовок
+                ResourcesStack.Children.Add(new Label
+                {
+                    Text = "Найденные ресурсы",
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    Margin = new Thickness(0, 20, 0, 10)
+                });
+
+                // Добавляем ресурсы
+                foreach (var resource in gameData.Production.Resources)
+                {
+                    var resourceElement = CreateResourceElement(resource);
+                    ResourcesStack.Children.Add(resourceElement);
+                }
+            }
+            else
+            {
+                ResourcesStack.IsVisible = false;
+            }
+        }
+
+        private async Task DisplayBuildingsAsync(GameData gameData)
+        {
+            // Очищаем контейнер
+            BuildingsStack.Children.Clear();
+
+            if (gameData.Production.Buildings.Count > 0)
+            {
+                BuildingsStack.IsVisible = true;
+
+                // Добавляем заголовок
+                BuildingsStack.Children.Add(new Label
+                {
+                    Text = "Найденные здания",
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    Margin = new Thickness(0, 20, 0, 10)
+                });
+
+                // Добавляем здания
+                foreach (var building in gameData.Production.Buildings)
+                {
+                    var buildingElement = CreateBuildingElement(building);
+                    BuildingsStack.Children.Add(buildingElement);
+                }
+            }
+            else
+            {
+                BuildingsStack.IsVisible = false;
+            }
+        }
+
+        private Border CreateResourceElement(GameResource resource)
         {
             var border = new Border
             {
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(8) },
-                Stroke = Color.FromArgb("#FF512BD4"), // Используем FromArgb вместо FromHex
+                Stroke = Color.FromArgb("#FF512BD4"),
                 Margin = new Thickness(0, 5, 0, 5),
                 Padding = new Thickness(10)
             };
@@ -147,15 +252,20 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-        {
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-        }
+                {
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                }
             };
 
             var nameLabel = new Label
             {
-                Text = name,
+                Text = resource.Name,
                 FontSize = 16,
                 FontAttributes = FontAttributes.Bold
             };
@@ -163,23 +273,93 @@ namespace CrustProductionViewer_MAUI.Views
 
             var amountLabel = new Label
             {
-                Text = $"Кол-во: {amount:F1} / {capacity:F1}",
+                Text = $"Кол-во: {resource.CurrentAmount:F1} / {resource.MaxCapacity:F1}",
                 FontSize = 14
             };
             grid.Add(amountLabel, 0, 1);
 
             var productionLabel = new Label
             {
-                Text = $"Производство: {production:F1}/мин",
+                Text = $"Производство: {resource.ProductionRate:F1}/мин",
                 FontSize = 14,
                 HorizontalOptions = LayoutOptions.End
             };
             grid.Add(productionLabel, 1, 0);
 
+            var consumptionLabel = new Label
+            {
+                Text = $"Потребление: {resource.ConsumptionRate:F1}/мин",
+                FontSize = 14,
+                HorizontalOptions = LayoutOptions.End
+            };
+            grid.Add(consumptionLabel, 1, 1);
+
             border.Content = grid;
             return border;
         }
 
+        private Border CreateBuildingElement(Building building)
+        {
+            var border = new Border
+            {
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(8) },
+                Stroke = building.IsActive ? Color.FromArgb("#FF059669") : Color.FromArgb("#FFDC2626"),
+                Margin = new Thickness(0, 5, 0, 5),
+                Padding = new Thickness(10)
+            };
 
+            var grid = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                }
+            };
+
+            var nameLabel = new Label
+            {
+                Text = $"{building.Name} (Ур. {building.Level})",
+                FontSize = 16,
+                FontAttributes = FontAttributes.Bold
+            };
+            grid.Add(nameLabel, 0, 0);
+            Grid.SetColumnSpan(nameLabel, 2);
+
+            var typeLabel = new Label
+            {
+                Text = $"Тип: {building.BuildingType}",
+                FontSize = 14
+            };
+            grid.Add(typeLabel, 0, 1);
+
+            var efficiencyLabel = new Label
+            {
+                Text = $"Эффективность: {building.Efficiency * 100:F0}%",
+                FontSize = 14,
+                HorizontalOptions = LayoutOptions.End
+            };
+            grid.Add(efficiencyLabel, 1, 1);
+
+            var statusLabel = new Label
+            {
+                Text = building.IsActive
+                    ? "Статус: Активно"
+                    : $"Статус: Не активно - {building.InactiveReason}",
+                FontSize = 14,
+                TextColor = building.IsActive ? Color.FromArgb("#FF059669") : Color.FromArgb("#FFDC2626")
+            };
+            grid.Add(statusLabel, 0, 2);
+            Grid.SetColumnSpan(statusLabel, 2);
+
+            border.Content = grid;
+            return border;
+        }
     }
 }

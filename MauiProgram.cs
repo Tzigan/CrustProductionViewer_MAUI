@@ -4,6 +4,7 @@ using CrustProductionViewer_MAUI.Services.Memory;
 using CommunityToolkit.Maui;
 using CrustProductionViewer_MAUI.Models;
 using Microsoft.Maui.LifecycleEvents;
+using CrustProductionViewer_MAUI.Services.Data;
 
 namespace CrustProductionViewer_MAUI
 {
@@ -33,6 +34,7 @@ namespace CrustProductionViewer_MAUI
 
             // Регистрация сервисов
             builder.Services.AddSingleton<WindowsMemoryService>();
+            builder.Services.AddSingleton<ICrustDataService, CrustDataService>();
 
             // Регистрация моделей данных
             builder.Services.AddSingleton<GameData>(provider => new GameData
