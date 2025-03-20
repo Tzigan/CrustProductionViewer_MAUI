@@ -136,7 +136,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             var frame = new Frame
             {
-                BorderColor = Colors.FromArgb("#512BD4"),
+                BorderColor = Color.FromHex("#512BD4"),
                 CornerRadius = 8,
                 Margin = new Thickness(0, 5, 0, 5),
                 Padding = new Thickness(10)
@@ -145,10 +145,10 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-                }
+        {
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+        }
             };
 
             var nameLabel = new Label
