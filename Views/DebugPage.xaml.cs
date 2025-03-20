@@ -108,9 +108,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnTestTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
+            TestTabButton.BackgroundColor = Application.Current?.Resources?["Primary"] as Color ?? Colors.Purple;
+            SignaturesTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
+            StructuresTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
 
             TestTab.IsVisible = true;
             SignaturesTab.IsVisible = false;
@@ -119,9 +119,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnSignaturesTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
+            TestTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
+            SignaturesTabButton.BackgroundColor = Application.Current?.Resources?["Primary"] as Color ?? Colors.Purple;
+            StructuresTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
 
             TestTab.IsVisible = false;
             SignaturesTab.IsVisible = true;
@@ -130,9 +130,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnStructuresTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
+            TestTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
+            SignaturesTabButton.BackgroundColor = Application.Current?.Resources?["Tertiary"] as Color ?? Colors.Lavender;
+            StructuresTabButton.BackgroundColor = Application.Current?.Resources?["Primary"] as Color ?? Colors.Purple;
 
             TestTab.IsVisible = false;
             SignaturesTab.IsVisible = false;
@@ -446,7 +446,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string addressText = AddressEntry.Text?.Trim();
+            string? addressText = AddressEntry.Text?.Trim();  // Используем string? вместо string
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -574,7 +574,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string addressText = AddressEntry.Text?.Trim();
+            string? addressText = AddressEntry.Text?.Trim();  // Используем string? вместо string
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -639,7 +639,7 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private void SetBusy(bool isBusy, string statusMessage = null)
+        private void SetBusy(bool isBusy, string? statusMessage = null)  // Добавляем ? к типу string
         {
             _isBusy = isBusy;
             BusyIndicator.IsRunning = isBusy;

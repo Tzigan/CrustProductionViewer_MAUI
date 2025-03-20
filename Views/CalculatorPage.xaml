@@ -18,10 +18,10 @@
                    Margin="0,0,0,20"/>
 
             <Border Stroke="{DynamicResource Primary}" 
-                   StrokeShape="RoundRectangle 8"
-                   Shadow="True"
-                   Padding="15"
-                   Margin="0,0,0,20">
+                    StrokeShape="RoundRectangle 8"
+                    StrokeThickness="1"
+                    Padding="15"
+                    Margin="0,0,0,20">
                 <Label Text="Эта функция находится в разработке и будет доступна в следующей версии приложения."
                        HorizontalOptions="Center"
                        HorizontalTextAlignment="Center"
