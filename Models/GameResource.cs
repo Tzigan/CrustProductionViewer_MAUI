@@ -1,6 +1,5 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Windows.Globalization;
 
 namespace CrustProductionViewer_MAUI.Models
 {
@@ -19,13 +18,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        private string name;
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание ресурса
         /// </summary>
         [ObservableProperty]
-        private string description;
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Текущее количество ресурса
@@ -55,7 +54,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        private string iconPath;
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Адрес в памяти для данных этого ресурса
