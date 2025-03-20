@@ -49,6 +49,7 @@ namespace CrustProductionViewer_MAUI
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ScanPage>();
             builder.Services.AddTransient<CalculatorPage>();
+            builder.Services.AddTransient<DebugPage>();
 
             // Регистрация маршрутов в Shell
             Routing.RegisterRoute("main", typeof(MainPage));

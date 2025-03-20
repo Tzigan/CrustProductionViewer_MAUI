@@ -2,7 +2,6 @@ using CrustProductionViewer_MAUI.Models;
 using CrustProductionViewer_MAUI.Services.Data;
 using CrustProductionViewer_MAUI.Services.Memory;
 using Microsoft.Maui.Controls;
-using Syncfusion.Maui.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -10,6 +10,15 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary>
+                <Color x:Key="Primary">#512BD4</Color>
+                <Color x:Key="Secondary">#757575</Color>
+                <Color x:Key="Tertiary">#8A65F0</Color>
+                <Color x:Key="Success">#05965C</Color>
+                <Color x:Key="Danger">Red</Color>
+                <Color x:Key="Warning">#E8B325</Color>
+                <Color x:Key="Info">#1E88E5</Color>
+            </ResourceDictionary>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

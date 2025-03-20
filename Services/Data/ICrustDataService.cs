@@ -10,6 +10,8 @@ namespace CrustProductionViewer_MAUI.Services.Data
     /// </summary>
     public interface ICrustDataService
     {
+
+        Task<GameData> RefreshDataAsync(IProgress<ScanProgress> progress);
         /// <summary>
         /// Получает информацию о состоянии подключения к игре
         /// </summary>
@@ -67,6 +69,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// Очищает кэш адресов в памяти
         /// </summary>
         void ClearAddressCache();
+
     }
 
     /// <summary>
