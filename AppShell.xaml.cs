@@ -9,6 +9,12 @@ namespace CrustProductionViewer_MAUI
         public AppShell()
         {
             InitializeComponent();
+
+            // Регистрация маршрутов для навигации
+            Routing.RegisterRoute("main", typeof(Views.MainPage));
+            Routing.RegisterRoute("scan", typeof(Views.ScanPage));
+            Routing.RegisterRoute("calculator", typeof(Views.CalculatorPage));
+
             var currentTheme = Application.Current!.UserAppTheme;
             ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
         }

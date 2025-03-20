@@ -2,11 +2,37 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CrustProductionViewer_MAUI.Views.CalculatorPage"
-             Title="CalculatorPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Калькулятор эффективности">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Калькулятор эффективности"
+                   FontSize="28"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+
+            <Label Text="Расчет оптимального количества зданий для производства ресурсов"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Secondary}"
+                   Margin="0,0,0,20"/>
+
+            <Frame BorderColor="{DynamicResource Primary}" 
+                   CornerRadius="8" 
+                   HasShadow="True"
+                   Padding="15"
+                   Margin="0,0,0,20">
+                <Label Text="Эта функция находится в разработке и будет доступна в следующей версии приложения."
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{DynamicResource Tertiary}"
+                       FontSize="16"/>
+            </Frame>
+
+            <Button Text="Вернуться на главную"
+                    Clicked="OnBackToMainClicked"
+                    HorizontalOptions="Center"
+                    Margin="0,10,0,0"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

@@ -1,9 +1,17 @@
-namespace CrustProductionViewer_MAUI.Views;
+using Microsoft.Maui.Controls;
 
-public partial class CalculatorPage : ContentPage
+namespace CrustProductionViewer_MAUI.Views
 {
-	public CalculatorPage()
-	{
-		InitializeComponent();
-	}
+    public partial class CalculatorPage : ContentPage
+    {
+        public CalculatorPage()
+        {
+            InitializeComponent();
+        }
+
+        private async void OnBackToMainClicked(object sender, System.EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//main");
+        }
+    }
 }

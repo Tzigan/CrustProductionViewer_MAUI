@@ -2,11 +2,179 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CrustProductionViewer_MAUI.Views.MainPage"
-             Title="MainPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="The Crust Production Viewer">
+
+    <Grid RowDefinitions="Auto,*,Auto" 
+          RowSpacing="20"
+          Padding="20">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="5">
+            <Label Text="The Crust Production Viewer"
+                   SemanticProperties.HeadingLevel="Level1"
+                   FontSize="28"
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,10"/>
+
+            <Label Text="Анализ производства и оптимизация ресурсов"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Secondary}"
+                   Margin="0,0,0,10"/>
+
+            <Frame BorderColor="{DynamicResource Primary}" 
+                   CornerRadius="8" 
+                   HasShadow="True"
+                   Padding="15"
+                   Margin="0,10,0,10">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Image Grid.Column="0"
+                           Source="game_icon.png"
+                           HeightRequest="48"
+                           WidthRequest="48"
+                           VerticalOptions="Center"/>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label x:Name="GameStatusLabel" 
+                               Text="Статус игры: не подключено"
+                               FontSize="16"/>
+                        <Label x:Name="LastScanLabel" 
+                               Text="Последнее сканирование: никогда"
+                               FontSize="14"
+                               TextColor="{DynamicResource Secondary}"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <Grid ColumnDefinitions="*,*" 
+                  RowDefinitions="*,*"
+                  Padding="10" 
+                  RowSpacing="20" 
+                  ColumnSpacing="20">
+
+                <!-- Сканирование памяти -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BorderColor="{DynamicResource Primary}"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnScanTapped"/>
+                    </Frame.GestureRecognizers>
+
+                    <VerticalStackLayout Spacing="10" Padding="10">
+                        <Image Source="scan_icon.png"
+                               HeightRequest="64"
+                               WidthRequest="64"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="Сканирование памяти"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="Подключение к игре и сканирование данных"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               TextColor="{DynamicResource Secondary}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Анализ производства -->
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BorderColor="{DynamicResource Primary}"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnProductionTapped"/>
+                    </Frame.GestureRecognizers>
+
+                    <VerticalStackLayout Spacing="10" Padding="10">
+                        <Image Source="production_icon.png"
+                               HeightRequest="64"
+                               WidthRequest="64"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="Анализ производства"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="Просмотр текущего производства и потребления"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               TextColor="{DynamicResource Secondary}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Калькулятор эффективности -->
+                <Frame Grid.Row="1" Grid.Column="0"
+                       BorderColor="{DynamicResource Primary}"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCalculatorTapped"/>
+                    </Frame.GestureRecognizers>
+
+                    <VerticalStackLayout Spacing="10" Padding="10">
+                        <Image Source="calculator_icon.png"
+                               HeightRequest="64"
+                               WidthRequest="64"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="Калькулятор эффективности"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="Расчет оптимального количества зданий"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               TextColor="{DynamicResource Secondary}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Настройки -->
+                <Frame Grid.Row="1" Grid.Column="1"
+                       BorderColor="{DynamicResource Primary}"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSettingsTapped"/>
+                    </Frame.GestureRecognizers>
+
+                    <VerticalStackLayout Spacing="10" Padding="10">
+                        <Image Source="settings_icon.png"
+                               HeightRequest="64"
+                               WidthRequest="64"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="Настройки"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="Конфигурация приложения и обновление"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               TextColor="{DynamicResource Secondary}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+        </ScrollView>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="5">
+            <Label Text="© 2023 CrustProductionViewer"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Tertiary}"/>
+
+            <Label x:Name="VersionLabel" 
+                   Text="Версия: 1.0.0"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Tertiary}"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
+
