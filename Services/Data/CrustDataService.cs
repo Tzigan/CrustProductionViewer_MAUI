@@ -1,5 +1,6 @@
 ﻿using CrustProductionViewer_MAUI.Models;
 using CrustProductionViewer_MAUI.Services.Memory;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
         private readonly GameData _gameData;
         private DateTime? _lastScanTime;
         private readonly string _gameProcess = "TheCrust";
+        private readonly ILogger<CrustDataService> _logger;
 
         /// <summary>
         /// Получает информацию о состоянии подключения к игре
@@ -41,9 +43,10 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// Инициализирует новый экземпляр класса CrustDataService
         /// </summary>
         /// <param name="memoryService">Сервис работы с памятью</param>
-        public CrustDataService(WindowsMemoryService memoryService)
+        public CrustDataService(WindowsMemoryService memoryService, ILogger<CrustDataService> logger)
         {
             _memoryService = memoryService;
+            _logger = logger;
             _gameData = new GameData
             {
                 Production = new Production(),
@@ -233,6 +236,8 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// </summary>
         private async Task ScanForBasicAddressesAsync(IProgress<ScanProgress>? progress = null)
         {
+            _logger.LogInformation("Начало сканирования сигнатур...");
+
             progress?.Report(new ScanProgress
             {
                 Stage = ScanStage.ScanningForSignatures,
