@@ -16,12 +16,12 @@
 
             <Label Text="⚠️ Только для разработчиков! ⚠️"
                    FontSize="16"
-                   TextColor="{DynamicResource Danger}"
+                   TextColor="Red"
                    HorizontalOptions="Center" />
 
             <Border StrokeShape="RoundRectangle 8"
-                    Stroke="{DynamicResource Primary}"
-                    Shadow="True"
+                    Stroke="#512BD4"
+                    StrokeThickness="1"
                     Padding="15"
                     Margin="0,10,0,10">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
@@ -43,7 +43,8 @@
         <!-- Основная зона со вкладками -->
         <ScrollView Grid.Row="1" Margin="0,10,0,10">
             <Border StrokeShape="RoundRectangle 8"
-                    Stroke="{DynamicResource Primary}"
+                    Stroke="#512BD4"
+                    StrokeThickness="1"
                     Padding="10">
 
                 <!-- Контент вкладок -->
@@ -56,16 +57,16 @@
                         <Button Text="Тесты" 
                                 Clicked="OnTestTabClicked"
                                 x:Name="TestTabButton"
-                                BackgroundColor="{DynamicResource Primary}"
+                                BackgroundColor="#512BD4"
                                 TextColor="White"
-                                CornerRadius="10,0,0,10"
+                                CornerRadius="10"
                                 Margin="0"
                                 Padding="15,10" />
 
                         <Button Text="Сигнатуры" 
                                 Clicked="OnSignaturesTabClicked"
                                 x:Name="SignaturesTabButton"
-                                BackgroundColor="{DynamicResource Tertiary}"
+                                BackgroundColor="#8A65F0"
                                 TextColor="White"
                                 CornerRadius="0"
                                 Margin="0"
@@ -74,9 +75,9 @@
                         <Button Text="Структуры" 
                                 Clicked="OnStructuresTabClicked"
                                 x:Name="StructuresTabButton"
-                                BackgroundColor="{DynamicResource Tertiary}"
+                                BackgroundColor="#8A65F0"
                                 TextColor="White"
-                                CornerRadius="0,10,10,0"
+                                CornerRadius="10"
                                 Margin="0"
                                 Padding="15,10" />
                     </HorizontalStackLayout>
@@ -91,19 +92,19 @@
 
                             <Button Text="Полное сканирование" 
                                     Clicked="OnFullScanClicked"
-                                    BackgroundColor="{DynamicResource Primary}" />
+                                    BackgroundColor="#512BD4" />
 
                             <Button Text="Быстрое обновление" 
                                     Clicked="OnQuickUpdateClicked"
-                                    BackgroundColor="{DynamicResource Success}" />
+                                    BackgroundColor="#05965C" />
 
                             <Button Text="Очистить кэш адресов" 
                                     Clicked="OnClearCacheClicked"
-                                    BackgroundColor="{DynamicResource Warning}" />
+                                    BackgroundColor="#E8B325" />
 
                             <Button Text="Сохранить результаты в файл" 
                                     Clicked="OnSaveResultsClicked"
-                                    BackgroundColor="{DynamicResource Info}" />
+                                    BackgroundColor="#1E88E5" />
 
                             <Label Text="Журнал операций:"
                                    FontSize="16"
@@ -111,7 +112,8 @@
                                    Margin="0,10,0,0" />
 
                             <Border StrokeShape="RoundRectangle 5"
-                                    Stroke="{DynamicResource Tertiary}"
+                                    Stroke="#8A65F0"
+                                    StrokeThickness="1"
                                     Padding="10"
                                     HeightRequest="200">
                                 <ScrollView>
@@ -149,7 +151,7 @@
 
                             <Button Text="Тестировать сигнатуру ресурсов" 
                                     Clicked="OnTestResourceSignatureClicked"
-                                    BackgroundColor="{DynamicResource Primary}" />
+                                    BackgroundColor="#512BD4" />
 
                             <Label Text="Сигнатура списка строений:"
                                    FontSize="14"
@@ -172,7 +174,7 @@
 
                             <Button Text="Тестировать сигнатуру строений" 
                                     Clicked="OnTestBuildingSignatureClicked"
-                                    BackgroundColor="{DynamicResource Primary}" />
+                                    BackgroundColor="#512BD4" />
 
                             <Label Text="Результаты поиска:"
                                    FontSize="16"
@@ -180,7 +182,8 @@
                                    Margin="0,10,0,0" />
 
                             <Border StrokeShape="RoundRectangle 5"
-                                    Stroke="{DynamicResource Tertiary}"
+                                    Stroke="#8A65F0"
+                                    StrokeThickness="1"
                                     Padding="10"
                                     HeightRequest="150">
                                 <ScrollView>
@@ -210,12 +213,12 @@
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                                 <Button Text="Прочитать как ресурс" 
                                         Clicked="OnReadAsResourceClicked"
-                                        BackgroundColor="{DynamicResource Primary}"
+                                        BackgroundColor="#512BD4"
                                         Grid.Column="0" />
 
                                 <Button Text="Прочитать как строение" 
                                         Clicked="OnReadAsBuildingClicked"
-                                        BackgroundColor="{DynamicResource Success}"
+                                        BackgroundColor="#05965C"
                                         Grid.Column="1" />
                             </Grid>
 
@@ -246,7 +249,7 @@
 
                             <Button Text="Применить изменения смещений" 
                                     Clicked="OnApplyOffsetsClicked"
-                                    BackgroundColor="{DynamicResource Warning}"
+                                    BackgroundColor="#E8B325"
                                     Margin="0,10,0,0" />
 
                             <Label Text="Результаты чтения структуры:"
@@ -255,7 +258,8 @@
                                    Margin="0,10,0,0" />
 
                             <Border StrokeShape="RoundRectangle 5"
-                                    Stroke="{DynamicResource Tertiary}"
+                                    Stroke="#8A65F0"
+                                    StrokeThickness="1"
                                     Padding="10"
                                     HeightRequest="150">
                                 <ScrollView>
@@ -276,7 +280,7 @@
             <Label x:Name="StatusLabel"
                    Text="Готов к отладке"
                    Grid.Column="0" Grid.Row="0"
-                   TextColor="{DynamicResource Info}" />
+                   TextColor="#1E88E5" />
 
             <ActivityIndicator x:Name="BusyIndicator"
                               IsRunning="False"
@@ -287,7 +291,7 @@
 
             <Button Text="Закрыть режим отладки"
                     Clicked="OnCloseDebugClicked"
-                    BackgroundColor="{DynamicResource Secondary}"
+                    BackgroundColor="#757575"
                     Grid.ColumnSpan="2" Grid.Row="1"
                     Margin="0,10,0,0" />
         </Grid>
