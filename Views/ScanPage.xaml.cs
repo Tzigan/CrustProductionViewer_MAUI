@@ -10,12 +10,12 @@ namespace CrustProductionViewer_MAUI.Views
         private readonly WindowsMemoryService _memoryService;
         private bool _isConnected = false;
 
-        public ScanPage()
+        public ScanPage(WindowsMemoryService memoryService)
         {
             InitializeComponent();
 
             // Получаем сервис из DI
-            _memoryService = Application.Current.Handler.MauiContext.Services.GetService<WindowsMemoryService>();
+            _memoryService = memoryService;
         }
 
         protected override void OnAppearing()

@@ -3,7 +3,6 @@ using CrustProductionViewer_MAUI.Views;
 using CrustProductionViewer_MAUI.Services.Memory;
 using CommunityToolkit.Maui;
 using CrustProductionViewer_MAUI.Models;
-using Microsoft.Maui.Handlers;
 using Microsoft.Maui.LifecycleEvents;
 
 namespace CrustProductionViewer_MAUI
@@ -15,28 +14,18 @@ namespace CrustProductionViewer_MAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit() // Добавляем поддержку CommunityToolkit
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
-                .ConfigureEssentials(essentials =>
-                {
-                    // Дополнительные настройки Essentials, если нужно
-                })
                 .ConfigureLifecycleEvents(events =>
                 {
-                    // Обработка событий жизненного цикла приложения
 #if WINDOWS
                     events.AddWindows(windows => windows
-                        .OnActivated((app) =>
-                        {
-                            // Можно выполнить дополнительные действия при активации приложения
-                        })
                         .OnClosed((app, args) =>
                         {
-                            // Освобождаем ресурсы при закрытии приложения
                             var memoryService = app.Services.GetService<WindowsMemoryService>();
                             memoryService?.Dispose();
                         }));
@@ -45,9 +34,6 @@ namespace CrustProductionViewer_MAUI
 
             // Регистрация сервисов
             builder.Services.AddSingleton<WindowsMemoryService>();
-
-            // Сервис будет добавлен в следующих обновлениях
-            // builder.Services.AddSingleton<CrustDataService>();
 
             // Регистрация моделей данных
             builder.Services.AddSingleton<GameData>(provider => new GameData
@@ -58,33 +44,21 @@ namespace CrustProductionViewer_MAUI
                 LastScanTime = DateTime.MinValue
             });
 
-            // Регистрация страниц
+            // Регистрация страниц - используем правильное DI
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ScanPage>();
             builder.Services.AddTransient<CalculatorPage>();
 
-            // Конфигурация обработчиков элементов UI
-            ConfigureUIHandlers();
+            // Регистрация маршрутов в Shell
+            Routing.RegisterRoute("main", typeof(MainPage));
+            Routing.RegisterRoute("scan", typeof(ScanPage));
+            Routing.RegisterRoute("calculator", typeof(CalculatorPage));
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
-        }
-
-        private static void ConfigureUIHandlers()
-        {
-            // Здесь можно настроить пользовательские обработчики для элементов UI
-            // Например, для кастомизации отображения элементов на разных платформах
-
-#if WINDOWS
-            // Настройки для Windows
-            ButtonHandler.Mapper.AppendToMapping("CustomButtonStyle", (handler, view) =>
-            {
-                // Настройка стиля кнопок для Windows
-            });
-#endif
         }
     }
 }

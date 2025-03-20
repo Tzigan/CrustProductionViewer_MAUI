@@ -28,7 +28,7 @@
                    Margin="0,10,0,10">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                     <Image Grid.Column="0"
-                           Source="game_icon.png"
+                           Source="app_game_icon.png"
                            HeightRequest="48"
                            WidthRequest="48"
                            VerticalOptions="Center"/>
@@ -63,7 +63,7 @@
                     </Frame.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
-                        <Image Source="scan_icon.png"
+                        <Image Source="app_scan_icon.png"
                                HeightRequest="64"
                                WidthRequest="64"
                                HorizontalOptions="Center"/>
@@ -90,7 +90,7 @@
                     </Frame.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
-                        <Image Source="production_icon.png"
+                        <Image Source="app_production_icon.png"
                                HeightRequest="64"
                                WidthRequest="64"
                                HorizontalOptions="Center"/>
@@ -117,7 +117,7 @@
                     </Frame.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
-                        <Image Source="calculator_icon.png"
+                        <Image Source="app_calculator_icon.png"
                                HeightRequest="64"
                                WidthRequest="64"
                                HorizontalOptions="Center"/>
@@ -144,7 +144,7 @@
                     </Frame.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
-                        <Image Source="settings_icon.png"
+                        <Image Source="app_settings_icon.png"
                                HeightRequest="64"
                                WidthRequest="64"
                                HorizontalOptions="Center"/>
