@@ -746,18 +746,58 @@ namespace CrustProductionViewer_MAUI.Views
             return new IntPtr(absoluteAddress);
         }
 
-        private int ConvertHexOffsetToInt(string hexOffset)
+        private int ConvertHexOffsetToInt(string? hexOffset)
         {
+            // Проверка на null или пустую строку
             if (string.IsNullOrEmpty(hexOffset))
                 return 0;
 
-            if (hexOffset.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                return Convert.ToInt32(hexOffset.Substring(2), 16);
+                // Удаляем все пробелы
+                hexOffset = hexOffset.Trim();
+
+                if (hexOffset.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Проверяем длину строки после префикса 0x
+                    if (hexOffset.Length <= 2)
+                    {
+                        // Если после 0x ничего нет, возвращаем 0
+                        return 0;
+                    }
+
+                    return Convert.ToInt32(hexOffset.Substring(2), 16);
+                }
+                else
+                {
+                    // Проверяем, что строка содержит только шестнадцатеричные символы
+                    if (!System.Text.RegularExpressions.Regex.IsMatch(hexOffset, "^[0-9A-Fa-f]+$"))
+                    {
+                        // Если строка содержит недопустимые символы, выводим предупреждение
+                        Debug.WriteLine($"Предупреждение: строка '{hexOffset}' содержит недопустимые символы");
+                        return 0;
+                    }
+
+                    return Convert.ToInt32(hexOffset, 16);
+                }
             }
-            else
+            catch (FormatException ex)
             {
-                return Convert.ToInt32(hexOffset, 16);
+                // Обрабатываем ошибку формата (недопустимые символы)
+                Debug.WriteLine($"Ошибка формата при преобразовании '{hexOffset}': {ex.Message}");
+                return 0;
+            }
+            catch (OverflowException ex)
+            {
+                // Обрабатываем переполнение (слишком большое значение для Int32)
+                Debug.WriteLine($"Переполнение при преобразовании '{hexOffset}': {ex.Message}");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                // Обрабатываем другие возможные исключения
+                Debug.WriteLine($"Неожиданная ошибка при преобразовании '{hexOffset}': {ex.Message}");
+                return 0;
             }
         }
 
