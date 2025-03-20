@@ -28,7 +28,7 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             try
             {
                 processName = processName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
-                    ? processName.Substring(0, processName.Length - 4)
+                    ? processName[..^4]  // Исправлено Substring на оператор диапазона
                     : processName;
 
                 var processes = Process.GetProcessesByName(processName);
@@ -88,10 +88,9 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 : new byte[size];
 
             IntPtr bytesRead;
-            bool result = NativeMethods.ReadProcessMemory(_processHandle, address,
-                buffer, size, out bytesRead);
-
-            if (!result || bytesRead.ToInt32() != size)
+            // Встраиваем результат вызова функции непосредственно в условие
+            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, size, out bytesRead) ||
+                bytesRead.ToInt32() != size)
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
 
             // Преобразуем Span<byte> обратно в структуру
@@ -109,10 +108,8 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 : new byte[maxLength];
 
             IntPtr bytesRead;
-            bool result = NativeMethods.ReadProcessMemory(_processHandle, address,
-                buffer, maxLength, out bytesRead);
-
-            if (!result)
+            // Встраиваем результат вызова функции непосредственно в условие
+            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, maxLength, out bytesRead))
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
 
             // Определяем конец строки (нулевой байт)

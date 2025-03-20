@@ -1,6 +1,6 @@
 namespace CrustProductionViewer_MAUI.Models;
 
-public class Building : Window
+public partial class Building : Window
 {
 	public Building()
 	{
