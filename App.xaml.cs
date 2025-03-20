@@ -15,14 +15,18 @@ namespace CrustProductionViewer_MAUI
             // Сохраняем ссылку на сервис памяти для освобождения ресурсов при закрытии
             _memoryService = memoryService;
 
-            // Инициализируем Shell как главную страницу приложения
-            MainPage = new AppShell();
+            // Удаляем устаревшую инициализацию MainPage
+            // MainPage = new AppShell();
         }
 
         // Переопределяем метод создания окна
         protected override Window CreateWindow(IActivationState? activationState)
         {
+            // Создаем базовое окно
             Window window = base.CreateWindow(activationState);
+
+            // Устанавливаем AppShell как корневую страницу окна
+            window.Page = new AppShell();
 
             // Подписываемся на событие закрытия окна с проверкой на null
             window.Destroying += OnWindowDestroying;
