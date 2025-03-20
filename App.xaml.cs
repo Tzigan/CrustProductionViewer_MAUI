@@ -12,13 +12,22 @@ namespace CrustProductionViewer_MAUI
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
-
             // Сохраняем ссылку на сервис памяти для освобождения ресурсов при закрытии
             _memoryService = memoryService;
 
-            // Подписываемся на событие закрытия окна
-            Microsoft.Maui.Controls.Application.Current.Windows[0].Destroying += OnWindowDestroying;
+            // Инициализируем Shell как главную страницу приложения
+            MainPage = new AppShell();
+        }
+
+        // Переопределяем метод создания окна
+        protected override Window CreateWindow(IActivationState activationState)
+        {
+            Window window = base.CreateWindow(activationState);
+
+            // Подписываемся на событие закрытия окна с проверкой на null
+            window.Destroying += OnWindowDestroying;
+
+            return window;
         }
 
         protected override void OnStart()
@@ -42,7 +51,8 @@ namespace CrustProductionViewer_MAUI
         }
 
         // Вызывается при закрытии окна приложения
-        private void OnWindowDestroying(object sender, EventArgs e)
+        // Исправлено: добавлен модификатор nullable для sender
+        private void OnWindowDestroying(object? sender, EventArgs e)
         {
             // Безопасное отключение от процесса игры и освобождение ресурсов
             if (_memoryService != null && _memoryService.IsConnected)
@@ -54,3 +64,4 @@ namespace CrustProductionViewer_MAUI
         }
     }
 }
+
