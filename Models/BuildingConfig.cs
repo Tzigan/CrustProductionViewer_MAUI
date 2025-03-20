@@ -18,13 +18,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Название типа здания
         /// </summary>
         [ObservableProperty]
-        private string name;
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание типа здания
         /// </summary>
         [ObservableProperty]
-        private string description;
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Категория здания
@@ -48,7 +48,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Путь к иконке типа здания
         /// </summary>
         [ObservableProperty]
-        private string iconPath;
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Конфигурация производимых ресурсов
