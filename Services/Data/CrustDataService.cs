@@ -61,6 +61,16 @@ namespace CrustProductionViewer_MAUI.Services.Data
         }
 
         /// <summary>
+        /// Обновляет данные о текущем состоянии игры, используя ранее найденные адреса
+        /// </summary>
+        /// <returns>Объект GameData с обновленной информацией</returns>
+        public async Task<GameData> RefreshDataAsync()
+        {
+            // Вызываем существующий метод с необязательным параметром
+            return await RefreshDataAsync(null);
+        }
+
+        /// <summary>
         /// Подключается к процессу игры
         /// </summary>
         /// <returns>True если подключение успешно, False в противном случае</returns>

@@ -137,6 +137,88 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 buffer, size, out nint bytesWritten);
         }
 
+        /// <summary>
+        /// Находит шаблон байтов в памяти процесса
+        /// </summary>
+        /// <param name="pattern">Шаблон байтов для поиска</param>
+        /// <param name="mask">Маска, где 'x' означает проверять байт, '?' пропустить</param>
+        /// <returns>Список адресов, где найден шаблон</returns>
+        public List<IntPtr> FindPattern(byte[] pattern, string mask)
+        {
+            if (!IsConnected || GameProcess == null)
+                return new List<IntPtr>();
+
+            if (pattern.Length != mask.Length)
+                throw new ArgumentException("Длина шаблона и маски должны совпадать");
+
+            List<IntPtr> results = new List<IntPtr>();
+
+            try
+            {
+                // Получаем основной модуль процесса
+                ProcessModule? mainModule = GameProcess.MainModule;
+                if (mainModule == null)
+                    return results;
+
+                // Базовый адрес и размер основного модуля
+                IntPtr baseAddress = mainModule.BaseAddress;
+                int moduleSize = mainModule.ModuleMemorySize;
+
+                // Буфер для чтения блоками (для оптимизации)
+                const int bufferSize = 4096 * 1024; // 4 MB блоки
+                byte[] buffer = new byte[bufferSize];
+
+                // Сканируем память блоками
+                for (int offset = 0; offset < moduleSize; offset += bufferSize)
+                {
+                    // Определяем размер текущего блока
+                    int currentSize = Math.Min(bufferSize, moduleSize - offset);
+                    IntPtr currentAddress = IntPtr.Add(baseAddress, offset);
+
+                    // Пытаемся прочитать блок
+                    bool readSuccess = NativeMethods.ReadProcessMemory(
+                        _processHandle,
+                        currentAddress,
+                        buffer,
+                        currentSize,
+                        out nint bytesRead);
+
+                    if (!readSuccess || bytesRead.ToInt32() == 0)
+                        continue;
+
+                    int actualBytesRead = bytesRead.ToInt32();
+
+                    // Ищем шаблон в текущем блоке
+                    for (int i = 0; i <= actualBytesRead - pattern.Length; i++)
+                    {
+                        bool found = true;
+
+                        // Проверяем соответствие шаблону
+                        for (int j = 0; j < pattern.Length; j++)
+                        {
+                            if (mask[j] == 'x' && buffer[i + j] != pattern[j])
+                            {
+                                found = false;
+                                break;
+                            }
+                        }
+
+                        if (found)
+                        {
+                            // Добавляем найденный адрес в результаты
+                            results.Add(IntPtr.Add(currentAddress, i));
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Игнорируем ошибки при поиске
+            }
+
+            return results;
+        }
+
         public IEnumerable<IntPtr> ScanMemory<T>(T value) where T : struct
         {
             if (!IsConnected)
@@ -291,7 +373,6 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                                 }
                             }
                         }
-                        // Обрабатываем исключения для больших регионов памяти
                         catch (OutOfMemoryException)
                         {
                             // Пропускаем слишком большие регионы
@@ -312,34 +393,100 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             return results;
         }
 
+        /// <summary>
+        /// Проверяет, удалось ли прочитать память по указанному адресу
+        /// </summary>
+        /// <param name="address">Адрес памяти</param>
+        /// <param name="buffer">Буфер для данных</param>
+        /// <param name="size">Размер для чтения</param>
+        /// <returns>True если удалось прочитать, False в противном случае</returns>
+        private bool ReadMemory(IntPtr address, Span<byte> buffer, int size)
+        {
+            if (!IsConnected)
+                return false;
+
+            return NativeMethods.ReadProcessMemory(
+                _processHandle,
+                address,
+                buffer,
+                size,
+                out nint bytesRead) && bytesRead.ToInt32() > 0;
+        }
+
+        /// <summary>
+        /// Возвращает или устанавливает значение бита в памяти
+        /// </summary>
+        /// <param name="address">Адрес памяти</param>
+        /// <param name="bitOffset">Смещение бита (0-7)</param>
+        /// <param name="value">Значение для установки (если указано)</param>
+        /// <returns>Текущее значение бита (если value == null) или успешность установки (если value != null)</returns>
+        public bool Bit(IntPtr address, int bitOffset, bool? value = null)
+        {
+            if (!IsConnected)
+                throw new InvalidOperationException("Не выполнено подключение к процессу");
+
+            if (bitOffset < 0 || bitOffset > 7)
+                throw new ArgumentOutOfRangeException(nameof(bitOffset), "Смещение бита должно быть от 0 до 7");
+
+            // Читаем текущий байт
+            byte currentByte = Read<byte>(address);
+
+            // Если нужно только прочитать значение
+            if (value == null)
+            {
+                return (currentByte & (1 << bitOffset)) != 0;
+            }
+
+            // Если нужно установить значение
+            byte newByte = value.Value
+                ? (byte)(currentByte | (1 << bitOffset))  // Устанавливаем бит
+                : (byte)(currentByte & ~(1 << bitOffset)); // Сбрасываем бит
+
+            // Записываем новое значение, если оно изменилось
+            if (newByte != currentByte)
+            {
+                return Write(address, newByte);
+            }
+
+            return true; // Значение уже установлено правильно
+        }
+
+        /// <summary>
+        /// Освобождает ресурсы
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Освобождает ресурсы
+        /// </summary>
+        /// <param name="disposing">True если вызван из Dispose, False если из финализатора</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
-                return;
-
-            if (disposing)
+            if (!_disposed)
             {
-                // Освобождаем управляемые ресурсы
-            }
+                if (disposing)
+                {
+                    // Освобождаем управляемые ресурсы
+                }
 
-            // Освобождаем неуправляемые ресурсы
-            if (IsConnected)
-            {
+                // Освобождаем неуправляемые ресурсы
                 Disconnect();
-            }
 
-            _disposed = true;
+                _disposed = true;
+            }
         }
 
+        /// <summary>
+        /// Финализатор
+        /// </summary>
         ~WindowsMemoryService()
         {
             Dispose(false);
         }
     }
 }
+
