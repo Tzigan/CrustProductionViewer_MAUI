@@ -21,9 +21,9 @@
                    TextColor="{DynamicResource Secondary}"
                    Margin="0,0,0,10"/>
 
-            <Frame BorderColor="{DynamicResource Primary}" 
-                   CornerRadius="8" 
-                   HasShadow="True"
+            <Border StrokeShape="RoundRectangle 8"
+                   Stroke="{DynamicResource Primary}"
+                   Shadow="True"
                    Padding="15"
                    Margin="0,10,0,10">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
@@ -43,7 +43,7 @@
                                TextColor="{DynamicResource Secondary}"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
         </VerticalStackLayout>
 
         <ScrollView Grid.Row="1">
@@ -54,13 +54,13 @@
                   ColumnSpacing="20">
 
                 <!-- Сканирование памяти -->
-                <Frame Grid.Row="0" Grid.Column="0"
-                       BorderColor="{DynamicResource Primary}"
-                       CornerRadius="10"
-                       HasShadow="True">
-                    <Frame.GestureRecognizers>
+                <Border Grid.Row="0" Grid.Column="0"
+                       StrokeShape="RoundRectangle 10"
+                       Stroke="{DynamicResource Primary}"
+                       Shadow="True">
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnScanTapped"/>
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <Image Source="app_scan_icon.png"
@@ -78,16 +78,16 @@
                                HorizontalOptions="Center"
                                TextColor="{DynamicResource Secondary}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- Анализ производства -->
-                <Frame Grid.Row="0" Grid.Column="1"
-                       BorderColor="{DynamicResource Primary}"
-                       CornerRadius="10"
-                       HasShadow="True">
-                    <Frame.GestureRecognizers>
+                <Border Grid.Row="0" Grid.Column="1"
+                       StrokeShape="RoundRectangle 10"
+                       Stroke="{DynamicResource Primary}"
+                       Shadow="True">
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnProductionTapped"/>
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <Image Source="app_production_icon.png"
@@ -105,16 +105,16 @@
                                HorizontalOptions="Center"
                                TextColor="{DynamicResource Secondary}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- Калькулятор эффективности -->
-                <Frame Grid.Row="1" Grid.Column="0"
-                       BorderColor="{DynamicResource Primary}"
-                       CornerRadius="10"
-                       HasShadow="True">
-                    <Frame.GestureRecognizers>
+                <Border Grid.Row="1" Grid.Column="0"
+                       StrokeShape="RoundRectangle 10"
+                       Stroke="{DynamicResource Primary}"
+                       Shadow="True">
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnCalculatorTapped"/>
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <Image Source="app_calculator_icon.png"
@@ -132,16 +132,16 @@
                                HorizontalOptions="Center"
                                TextColor="{DynamicResource Secondary}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- Настройки -->
-                <Frame Grid.Row="1" Grid.Column="1"
-                       BorderColor="{DynamicResource Primary}"
-                       CornerRadius="10"
-                       HasShadow="True">
-                    <Frame.GestureRecognizers>
+                <Border Grid.Row="1" Grid.Column="1"
+                       StrokeShape="RoundRectangle 10"
+                       Stroke="{DynamicResource Primary}"
+                       Shadow="True">
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnSettingsTapped"/>
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <Image Source="app_settings_icon.png"
@@ -159,7 +159,7 @@
                                HorizontalOptions="Center"
                                TextColor="{DynamicResource Secondary}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
             </Grid>
         </ScrollView>
 
@@ -177,4 +177,3 @@
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
-

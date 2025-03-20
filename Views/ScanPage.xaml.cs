@@ -1,5 +1,6 @@
 using CrustProductionViewer_MAUI.Services.Memory;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Threading.Tasks;
 
@@ -132,12 +133,13 @@ namespace CrustProductionViewer_MAUI.Views
         }
 
         // Метод для создания элемента ресурса (будет использоваться позже)
-        private Frame CreateResourceFrame(string name, double amount, double capacity, double production)
+        // Метод для создания элемента ресурса (будет использоваться позже)
+        private Border CreateResourceFrame(string name, double amount, double capacity, double production)
         {
-            var frame = new Frame
+            var border = new Border
             {
-                BorderColor = Color.FromHex("#512BD4"),
-                CornerRadius = 8,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(8) },
+                Stroke = Color.FromArgb("#FF512BD4"), // Используем FromArgb вместо FromHex
                 Margin = new Thickness(0, 5, 0, 5),
                 Padding = new Thickness(10)
             };
@@ -174,8 +176,10 @@ namespace CrustProductionViewer_MAUI.Views
             };
             grid.Add(productionLabel, 1, 0);
 
-            frame.Content = grid;
-            return frame;
+            border.Content = grid;
+            return border;
         }
+
+
     }
 }

@@ -80,13 +80,13 @@ namespace CrustProductionViewer_MAUI.Views
         // Метод для анимации нажатия на кнопку
         private async Task AnimateButtonTap(object sender)
         {
-            if (sender is Frame frame)
+            if (sender is Border border)
             {
                 // Уменьшаем размер при нажатии
-                await frame.ScaleTo(0.95, 50, Easing.CubicOut);
+                await border.ScaleTo(0.95, 50, Easing.CubicOut);
 
                 // Возвращаем исходный размер
-                await frame.ScaleTo(1, 50, Easing.CubicIn);
+                await border.ScaleTo(1, 50, Easing.CubicIn);
             }
         }
     }

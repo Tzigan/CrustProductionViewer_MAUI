@@ -22,7 +22,7 @@ namespace CrustProductionViewer_MAUI
 
             var snackbarOptions = new SnackbarOptions
             {
-                BackgroundColor = Color.FromArgb("#FF3300"),
+                BackgroundColor = Color.FromArgb("#FFFF3300"),  // Изменено с FromHex на FromArgb и добавлен Alpha-канал
                 TextColor = Colors.White,
                 ActionButtonTextColor = Colors.Yellow,
                 CornerRadius = new CornerRadius(0),
@@ -34,6 +34,7 @@ namespace CrustProductionViewer_MAUI
 
             await snackbar.Show(cancellationTokenSource.Token);
         }
+
 
         public static async Task DisplayToastAsync(string message)
         {

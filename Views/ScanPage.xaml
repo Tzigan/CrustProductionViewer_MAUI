@@ -7,13 +7,13 @@
     <Grid RowDefinitions="Auto,*" Padding="20">
         <VerticalStackLayout Grid.Row="0" Spacing="10">
             <Label Text="Сканирование памяти игры"
-                   Style="{StaticResource Header}"
+                   FontSize="28"
                    HorizontalOptions="Center"
                    Margin="0,0,0,10"/>
 
-            <Frame BorderColor="{DynamicResource Primary}" 
-                   CornerRadius="8" 
-                   HasShadow="True"
+            <!-- Замена Frame на Border -->
+            <Border StrokeShape="RoundRectangle 8"
+                   Stroke="{StaticResource Primary}"
                    Padding="15"
                    Margin="0,0,0,20">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
@@ -22,7 +22,7 @@
                            Text="Процесс The Crust не найден"
                            FontSize="16"
                            VerticalOptions="Center"
-                           TextColor="{DynamicResource Danger}"/>
+                           TextColor="{StaticResource Danger}"/>
 
                     <Button x:Name="ConnectButton"
                             Grid.Column="1"
@@ -30,7 +30,7 @@
                             Clicked="OnConnectClicked"
                             VerticalOptions="Center"/>
                 </Grid>
-            </Frame>
+            </Border>
 
             <Button x:Name="ScanButton"
                     Text="Сканировать память"
@@ -42,20 +42,21 @@
             <Label x:Name="ScanStatusLabel"
                    Text="Для начала сканирования подключитесь к игре"
                    HorizontalOptions="Center"
-                   TextColor="{DynamicResource Secondary}"
+                   TextColor="{StaticResource Secondary}"
                    FontSize="14"/>
         </VerticalStackLayout>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="15" Padding="0,20,0,0">
                 <Label Text="Результаты сканирования"
-                       Style="{StaticResource Subheader}"
+                       FontSize="18"
+                       FontAttributes="Bold"
                        Margin="0,0,0,10"/>
 
                 <!-- Здесь будут отображаться результаты сканирования -->
                 <Label x:Name="ResultsLabel"
                        Text="Нет данных. Выполните сканирование."
-                       TextColor="{DynamicResource Secondary}"/>
+                       TextColor="{StaticResource Secondary}"/>
 
                 <ActivityIndicator x:Name="ScanningIndicator"
                                    IsRunning="False"
@@ -79,3 +80,4 @@
         </ScrollView>
     </Grid>
 </ContentPage>
+
