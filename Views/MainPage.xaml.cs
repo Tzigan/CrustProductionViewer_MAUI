@@ -19,10 +19,27 @@ namespace CrustProductionViewer_MAUI.Views
             // Установка актуальной версии приложения
             VersionLabel.Text = $"Версия: {AppInfo.VersionString}";
 
-            // Добавление обработчика нажатия на лого для секретного режима отладки
-            var logoTapGesture = new TapGestureRecognizer();
-            logoTapGesture.Tapped += OnLogoTapped;
-            AppImage.GestureRecognizers.Add(logoTapGesture);
+            // Добавление обработчика нажатия на заголовок для секретного режима отладки
+            var titleTapGesture = new TapGestureRecognizer();
+            titleTapGesture.Tapped += OnLogoTapped;
+
+            // Применяем жест к заголовку страницы
+            // Вместо несуществующего AppImage используем другой элемент
+            // В данном случае, мы добавим жест к заголовку страницы
+            var titleLabel = this.FindByName<Label>("TitleLabel");
+            if (titleLabel != null)
+            {
+                titleLabel.GestureRecognizers.Add(titleTapGesture);
+            }
+            else
+            {
+                // Если TitleLabel не найден, добавляем жест к первой метке на странице
+                var firstLabel = this.FindByName<Label>("VersionLabel");
+                if (firstLabel != null)
+                {
+                    firstLabel.GestureRecognizers.Add(titleTapGesture);
+                }
+            }
         }
 
         protected override void OnAppearing()
@@ -112,7 +129,7 @@ namespace CrustProductionViewer_MAUI.Views
         }
 
         // Обработчик нажатия на лого для секретного режима отладки
-        private async void OnLogoTapped(object sender, EventArgs e)
+        private async void OnLogoTapped(object? sender, TappedEventArgs e)
         {
             _logoTapCount++;
 
@@ -147,7 +164,7 @@ namespace CrustProductionViewer_MAUI.Views
                 await Task.Delay(5000);
                 if (this.IsVisible)
                 {
-                    MainThread.BeginInvokeOnMainThread(UpdateGameStatus);
+                    Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(UpdateGameStatus);
                 }
             }
         }
