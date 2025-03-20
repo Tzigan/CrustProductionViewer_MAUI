@@ -79,13 +79,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Ресурсы, производимые этим строением
         /// </summary>
         [ObservableProperty]
-        private List<ResourceProduction> producedResources = new();
+        private List<ResourceProduction> producedResources = [];
 
         /// <summary>
         /// Ресурсы, потребляемые этим строением
         /// </summary>
         [ObservableProperty]
-        private List<ResourceConsumption> consumedResources = new();
+        private List<ResourceConsumption> consumedResources = [];
 
         /// <summary>
         /// Активно ли строение

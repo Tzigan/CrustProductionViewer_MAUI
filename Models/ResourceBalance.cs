@@ -61,19 +61,19 @@ namespace CrustProductionViewer_MAUI.Models
         /// Рекомендации по оптимизации производства
         /// </summary>
         [ObservableProperty]
-        private List<BuildingRecommendation> recommendations = new();
+        private List<BuildingRecommendation> recommendations = [];
 
         /// <summary>
         /// Здания, производящие этот ресурс
         /// </summary>
         [ObservableProperty]
-        private List<Building> producerBuildings = new();
+        private List<Building> producerBuildings = [];
 
         /// <summary>
         /// Здания, потребляющие этот ресурс
         /// </summary>
         [ObservableProperty]
-        private List<Building> consumerBuildings = new();
+        private List<Building> consumerBuildings = [];
 
         /// <summary>
         /// Время для исчерпания ресурса при текущем потреблении (в минутах)
@@ -109,7 +109,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// <summary>
         /// Определяет недостающее или избыточное количество зданий для оптимального производства
         /// </summary>
-        /// <param name="buildingType">Тип здания</param>
+        /// <param name="buildingType">Тип здания (сохранен для совместимости API)</param>
         /// <param name="baseProductionPerBuilding">Базовое производство ресурса одним зданием</param>
         /// <param name="safetyFactor">Коэффициент запаса</param>
         /// <returns>Рекомендуемое изменение количества зданий (положительное - добавить, отрицательное - убрать)</returns>

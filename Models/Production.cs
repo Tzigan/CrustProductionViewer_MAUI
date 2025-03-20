@@ -20,13 +20,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Список всех ресурсов в игре
         /// </summary>
         [ObservableProperty]
-        private List<GameResource> resources = new();
+        private List<GameResource> resources = [];
 
         /// <summary>
         /// Список всех строений в игре
         /// </summary>
         [ObservableProperty]
-        private List<Building> buildings = new();
+        private List<Building> buildings = [];
 
         /// <summary>
         /// Общая потребляемая энергия

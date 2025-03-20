@@ -54,25 +54,25 @@ namespace CrustProductionViewer_MAUI.Models
         /// Конфигурация производимых ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceProductionConfig> producedResources = new();
+        private List<ResourceProductionConfig> producedResources = [];
 
         /// <summary>
         /// Конфигурация потребляемых ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceConsumptionConfig> consumedResources = new();
+        private List<ResourceConsumptionConfig> consumedResources = [];
 
         /// <summary>
         /// Стоимость строительства (ресурсы)
         /// </summary>
         [ObservableProperty]
-        private List<BuildingCost> constructionCosts = new();
+        private List<BuildingCost> constructionCosts = [];
 
         /// <summary>
         /// Коэффициенты улучшения по уровням
         /// </summary>
         [ObservableProperty]
-        private List<LevelUpgrade> levelUpgrades = new();
+        private List<LevelUpgrade> levelUpgrades = [];
 
         /// <summary>
         /// Сигнатура в памяти для поиска зданий этого типа

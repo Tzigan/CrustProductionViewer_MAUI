@@ -20,13 +20,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Балансы ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceBalance> resourceBalances = new();
+        private List<ResourceBalance> resourceBalances = [];
 
         /// <summary>
         /// Конфигурации зданий
         /// </summary>
         [ObservableProperty]
-        private List<BuildingConfig> buildingConfigs = new();
+        private List<BuildingConfig> buildingConfigs = [];
 
         /// <summary>
         /// Время последнего сканирования памяти
@@ -52,7 +52,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// <returns>Список балансов ресурсов</returns>
         public List<ResourceBalance> CalculateResourceBalances()
         {
-            List<ResourceBalance> balances = new();
+            List<ResourceBalance> balances = [];
 
             if (Production == null || Production.Resources == null)
                 return balances;
@@ -95,14 +95,10 @@ namespace CrustProductionViewer_MAUI.Models
                 }
 
                 // Находим здания, производящие этот ресурс
-                balance.ProducerBuildings = Production.Buildings
-                    .Where(b => b.ProducedResources.Any(pr => pr.ResourceId == resource.Id))
-                    .ToList();
+                balance.ProducerBuildings = [.. Production.Buildings.Where(b => b.ProducedResources.Any(pr => pr.ResourceId == resource.Id))];
 
                 // Находим здания, потребляющие этот ресурс
-                balance.ConsumerBuildings = Production.Buildings
-                    .Where(b => b.ConsumedResources.Any(cr => cr.ResourceId == resource.Id))
-                    .ToList();
+                balance.ConsumerBuildings = [.. Production.Buildings.Where(b => b.ConsumedResources.Any(cr => cr.ResourceId == resource.Id))];
 
                 // Добавляем рекомендации, если есть дефицит
                 if (balance.BalanceType == ResourceBalanceType.SlightDeficit ||
@@ -166,9 +162,7 @@ namespace CrustProductionViewer_MAUI.Models
             }
 
             // Сортируем рекомендации по приоритету
-            balance.Recommendations = balance.Recommendations
-                .OrderByDescending(r => r.Priority)
-                .ToList();
+            balance.Recommendations = [.. balance.Recommendations.OrderByDescending(r => r.Priority)];
         }
 
         /// <summary>
