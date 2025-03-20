@@ -1,63 +1,56 @@
-﻿using CommunityToolkit.Maui;
-using CrustProductionViewer_MAUI.Models;
-using CrustProductionViewer_MAUI.Services.Memory;
-using CrustProductionViewer_MAUI.Views;
-using Microsoft.Extensions.Logging;
+﻿using CrustProductionViewer_MAUI.Services.Memory;
+using Microsoft.Maui.Controls;
+using System;
 
 namespace CrustProductionViewer_MAUI
 {
-    public static class MauiProgram
+    public partial class App : Application
     {
-        public static MauiApp CreateMauiApp()
+        private readonly WindowsMemoryService _memoryService;
+
+        public App(WindowsMemoryService memoryService)
         {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                })
-                .ConfigureLifecycleEvents(events =>
-                {
-#if WINDOWS
-                    events.AddWindows(windows => windows
-                        .OnWindowCreated(window =>
-                        {
-                            // Можно выполнить настройку окна при его создании
-                        }));
-#endif
-                });
+            InitializeComponent();
 
-            // Регистрация сервисов
-            builder.Services.AddSingleton<WindowsMemoryService>();
+            MainPage = new AppShell();
 
-            // Регистрация моделей данных
-            builder.Services.AddSingleton<GameData>(provider => new GameData
+            // Сохраняем ссылку на сервис памяти для освобождения ресурсов при закрытии
+            _memoryService = memoryService;
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            // Дополнительные действия при запуске приложения
+        }
+
+        protected override void OnSleep()
+        {
+            base.OnSleep();
+            // Приложение переходит в фоновый режим
+            // Можно сохранить состояние или приостановить некоторые операции
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            // Приложение возвращается из фонового режима
+            // Можно восстановить состояние или возобновить операции
+        }
+
+        // Вызывается при завершении работы приложения
+        protected override void OnStop()
+        {
+            // Безопасное отключение от процесса игры и освобождение ресурсов
+            if (_memoryService != null && _memoryService.IsConnected)
             {
-                Production = new Production(),
-                IsConnected = false,
-                GameVersion = "Unknown",
-                LastScanTime = DateTime.MinValue
-            });
+                _memoryService.Disconnect();
+            }
 
-            // Регистрация страниц
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<ScanPage>();
-            builder.Services.AddTransient<CalculatorPage>();
+            _memoryService?.Dispose();
 
-            // Регистрация маршрутов в Shell
-            Routing.RegisterRoute("main", typeof(MainPage));
-            Routing.RegisterRoute("scan", typeof(ScanPage));
-            Routing.RegisterRoute("calculator", typeof(CalculatorPage));
-
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
-
-            return builder.Build();
+            base.OnStop();
         }
     }
-
 }
+
