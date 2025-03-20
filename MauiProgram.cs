@@ -24,10 +24,9 @@ namespace CrustProductionViewer_MAUI
                 {
 #if WINDOWS
                     events.AddWindows(windows => windows
-                        .OnClosed((app, args) =>
+                        .OnWindowCreated(window =>
                         {
-                            var memoryService = app.Services.GetService<WindowsMemoryService>();
-                            memoryService?.Dispose();
+                            // Можно выполнить настройку окна при его создании
                         }));
 #endif
                 });
@@ -44,7 +43,7 @@ namespace CrustProductionViewer_MAUI
                 LastScanTime = DateTime.MinValue
             });
 
-            // Регистрация страниц - используем правильное DI
+            // Регистрация страниц
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ScanPage>();
             builder.Services.AddTransient<CalculatorPage>();
