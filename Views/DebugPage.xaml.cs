@@ -2,6 +2,7 @@ using CrustProductionViewer_MAUI.Models;
 using CrustProductionViewer_MAUI.Services.Data;
 using CrustProductionViewer_MAUI.Services.Memory;
 using Microsoft.Maui.Controls;
+using Syncfusion.Maui.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +21,15 @@ namespace CrustProductionViewer_MAUI.Views
         private readonly WindowsMemoryService _memoryService;
         private GameData _lastScanData;
         private bool _isBusy;
+
+        // Определяем цвета, которые будем использовать вместо ресурсов
+        private static readonly Color PrimaryColor = Color.FromArgb("#512BD4");   // Фиолетовый
+        private static readonly Color TertiaryColor = Color.FromArgb("#8A65F0");  // Светло-фиолетовый
+        private static readonly Color SuccessColor = Color.FromArgb("#05965C");   // Зеленый
+        private static readonly Color DangerColor = Color.FromArgb("#DC2626");    // Красный
+        private static readonly Color WarningColor = Color.FromArgb("#E8B325");   // Желтый
+        private static readonly Color InfoColor = Color.FromArgb("#1E88E5");      // Голубой
+        private static readonly Color SecondaryColor = Color.FromArgb("#757575"); // Серый
 
         public DebugPage(ICrustDataService dataService, WindowsMemoryService memoryService)
         {
@@ -56,13 +66,13 @@ namespace CrustProductionViewer_MAUI.Views
             if (isConnected)
             {
                 ConnectionStatusLabel.Text = $"Статус подключения: подключено к игре";
-                ConnectionStatusLabel.TextColor = Color.FromArgb("#FF059669"); // Success color
+                ConnectionStatusLabel.TextColor = SuccessColor;
                 ConnectButton.Text = "Отключиться";
             }
             else
             {
                 ConnectionStatusLabel.Text = "Статус подключения: не подключено";
-                ConnectionStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
+                ConnectionStatusLabel.TextColor = DangerColor;
                 ConnectButton.Text = "Подключиться";
             }
         }
@@ -108,9 +118,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnTestTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
+            TestTabButton.BackgroundColor = PrimaryColor;
+            SignaturesTabButton.BackgroundColor = TertiaryColor;
+            StructuresTabButton.BackgroundColor = TertiaryColor;
 
             TestTab.IsVisible = true;
             SignaturesTab.IsVisible = false;
@@ -119,9 +129,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnSignaturesTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
+            TestTabButton.BackgroundColor = TertiaryColor;
+            SignaturesTabButton.BackgroundColor = PrimaryColor;
+            StructuresTabButton.BackgroundColor = TertiaryColor;
 
             TestTab.IsVisible = false;
             SignaturesTab.IsVisible = true;
@@ -130,9 +140,9 @@ namespace CrustProductionViewer_MAUI.Views
 
         private void OnStructuresTabClicked(object sender, EventArgs e)
         {
-            TestTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            SignaturesTabButton.BackgroundColor = (Color)Application.Current.Resources["Tertiary"];
-            StructuresTabButton.BackgroundColor = (Color)Application.Current.Resources["Primary"];
+            TestTabButton.BackgroundColor = TertiaryColor;
+            SignaturesTabButton.BackgroundColor = TertiaryColor;
+            StructuresTabButton.BackgroundColor = PrimaryColor;
 
             TestTab.IsVisible = false;
             SignaturesTab.IsVisible = false;
@@ -728,5 +738,12 @@ namespace CrustProductionViewer_MAUI.Views
         }
 
         #endregion
+
+        // Метод InitializeComponent добавляется автоматически при компиляции XAML-файла
+        // Если это не происходит, то можно добавить его вручную:
+        private void InitializeComponent()
+        {
+            LoadFromXaml(typeof(DebugPage));
+        }
     }
 }
