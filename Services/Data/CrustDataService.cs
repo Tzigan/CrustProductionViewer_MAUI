@@ -17,10 +17,10 @@ namespace CrustProductionViewer_MAUI.Services.Data
     public class CrustDataService : ICrustDataService
     {
         private readonly WindowsMemoryService _memoryService;
-        private AddressMap _addressMap = new();
+        private readonly AddressMap _addressMap = new(); // Сделано readonly
         private GameData _gameData;
         private DateTime? _lastScanTime;
-        private string _gameProcess = "TheCrust";
+        private readonly string _gameProcess = "TheCrust"; // Сделано readonly
 
         /// <summary>
         /// Получает информацию о состоянии подключения к игре
@@ -910,11 +910,15 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// </summary>
         public void ClearAddressCache()
         {
-            _addressMap = new AddressMap
-            {
-                GameVersion = _gameData.GameVersion,
-                CreationTime = DateTime.Now
-            };
+            // Очищаем существующие коллекции вместо создания нового объекта
+            _addressMap.ResourceAddresses.Clear();
+            _addressMap.BuildingAddresses.Clear();
+            _addressMap.ResourceListAddress = 0;
+            _addressMap.BuildingListAddress = 0;
+
+            // Обновляем метаданные
+            _addressMap.GameVersion = _gameData.GameVersion;
+            _addressMap.CreationTime = DateTime.Now;
 
             // Сохраняем информацию о базовом модуле
             if (IsConnected && _memoryService.GameProcess != null)
