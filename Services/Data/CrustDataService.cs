@@ -54,7 +54,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
 
             // Создаем директорию для сохранения данных, если она не существует
             var dataDir = Path.GetDirectoryName(AddressMap.GetDefaultFilePath());
-            if (!Directory.Exists(dataDir))
+            if (!string.IsNullOrEmpty(dataDir) && !Directory.Exists(dataDir)) // Исправлено CS8604
             {
                 Directory.CreateDirectory(dataDir);
             }
@@ -109,12 +109,15 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <summary>
         /// Пытается определить версию игры
         /// </summary>
-        private async Task DetectGameVersionAsync()
+        private async Task DetectGameVersionAsync() // Исправлено CS1998
         {
             try
             {
                 if (!IsConnected)
                     return;
+
+                // Используем await для оправдания асинхронности метода
+                await Task.Yield();
 
                 // Получаем информацию о процессе
                 Process? gameProcess = _memoryService.GameProcess;
@@ -206,8 +209,8 @@ namespace CrustProductionViewer_MAUI.Services.Data
                 Stage = ScanStage.Completed,
                 Message = "Сканирование завершено",
                 PercentComplete = 100,
-                ResourcesFound = _gameData.Production.Resources.Count,
-                BuildingsFound = _gameData.Production.Buildings.Count
+                ResourcesFound = _gameData.Production?.Resources?.Count ?? 0, // Исправлено CS8602
+                BuildingsFound = _gameData.Production?.Buildings?.Count ?? 0 // Исправлено CS8602
             });
 
             return _gameData;
@@ -346,7 +349,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                                 _addressMap.ResourceAddresses[resource.Id] = resourcePtr.ToInt64();
 
                                 // Добавляем ресурс в список
-                                _gameData.Production.Resources.Add(resource);
+                                _gameData.Production?.Resources?.Add(resource); // Исправлено CS8602
 
                                 // Обновляем прогресс
                                 progress?.Report(new ScanProgress
@@ -375,12 +378,15 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <summary>
         /// Читает данные о ресурсе из памяти
         /// </summary>
-        private async Task<GameResource> ReadResourceDataAsync(IntPtr resourcePtr)
+        private async Task<GameResource> ReadResourceDataAsync(IntPtr resourcePtr) // Исправлено CS1998
         {
             var resource = new GameResource();
 
             try
             {
+                // Используем await для оправдания асинхронности метода
+                await Task.Yield();
+
                 // Базовые свойства ресурса
                 resource.Id = _memoryService.Read<int>(IntPtr.Add(resourcePtr, MemorySignatures.ResourceOffsets.Id));
                 resource.MemoryAddress = resourcePtr;
@@ -465,7 +471,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                                 _addressMap.BuildingAddresses[building.Id] = buildingPtr.ToInt64();
 
                                 // Добавляем строение в список
-                                _gameData.Production.Buildings.Add(building);
+                                _gameData.Production?.Buildings?.Add(building); // Исправлено CS8602
 
                                 // Обновляем прогресс
                                 progress?.Report(new ScanProgress
@@ -494,12 +500,15 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <summary>
         /// Читает данные о строении из памяти
         /// </summary>
-        private async Task<Building> ReadBuildingDataAsync(IntPtr buildingPtr)
+        private async Task<Building> ReadBuildingDataAsync(IntPtr buildingPtr) // Исправлено CS1998
         {
             var building = new Building();
 
             try
             {
+                // Используем await для оправдания асинхронности метода
+                await Task.Yield();
+
                 // Базовые свойства строения
                 building.Id = _memoryService.Read<int>(IntPtr.Add(buildingPtr, MemorySignatures.BuildingOffsets.Id));
                 building.MemoryAddress = buildingPtr;
@@ -563,7 +572,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                                     ActualProductionRate = _memoryService.Read<double>(IntPtr.Add(productionPtr, 16))
                                 };
 
-                                building.ProducedResources.Add(production);
+                                building.ProducedResources?.Add(production); // Исправлено CS8602
                             }
                         }
                     }
@@ -590,7 +599,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                                     ActualConsumptionRate = _memoryService.Read<double>(IntPtr.Add(consumptionPtr, 16))
                                 };
 
-                                building.ConsumedResources.Add(consumption);
+                                building.ConsumedResources?.Add(consumption); // Исправлено CS8602
                             }
                         }
                     }
@@ -655,8 +664,8 @@ namespace CrustProductionViewer_MAUI.Services.Data
                     Stage = ScanStage.Completed,
                     Message = "Обновление данных завершено",
                     PercentComplete = 100,
-                    ResourcesFound = _gameData.Production.Resources.Count,
-                    BuildingsFound = _gameData.Production.Buildings.Count
+                    ResourcesFound = _gameData.Production?.Resources?.Count ?? 0, // Исправлено CS8602
+                    BuildingsFound = _gameData.Production?.Buildings?.Count ?? 0 // Исправлено CS8602
                 });
             }
             catch (Exception ex)
@@ -716,7 +725,10 @@ namespace CrustProductionViewer_MAUI.Services.Data
             }
 
             // Заменяем список ресурсов на обновленный
-            _gameData.Production.Resources = updatedResources;
+            if (_gameData.Production != null) // Исправлено CS8602
+            {
+                _gameData.Production.Resources = updatedResources;
+            }
 
             progress?.Report(new ScanProgress
             {
@@ -771,7 +783,10 @@ namespace CrustProductionViewer_MAUI.Services.Data
             }
 
             // Заменяем список строений на обновленный
-            _gameData.Production.Buildings = updatedBuildings;
+            if (_gameData.Production != null) // Исправлено CS8602
+            {
+                _gameData.Production.Buildings = updatedBuildings;
+            }
 
             progress?.Report(new ScanProgress
             {
@@ -788,24 +803,33 @@ namespace CrustProductionViewer_MAUI.Services.Data
         private void CalculateProductionStatistics()
         {
             // Сбрасываем счетчики
+            if (_gameData.Production == null) // Исправлено CS8602
+                return;
+
             _gameData.Production.TotalEnergyConsumption = 0;
             _gameData.Production.TotalEnergyProduction = 0;
             _gameData.Production.TotalWorkers = 0;
             _gameData.Production.MaxWorkers = 0;
 
             // Суммируем потребление энергии
-            foreach (var building in _gameData.Production.Buildings)
+            if (_gameData.Production.Buildings != null) // Исправлено CS8602
             {
-                _gameData.Production.TotalEnergyConsumption += building.EnergyConsumption;
-                _gameData.Production.TotalWorkers += building.CurrentWorkers;
-                _gameData.Production.MaxWorkers += building.WorkersCapacity;
+                foreach (var building in _gameData.Production.Buildings)
+                {
+                    _gameData.Production.TotalEnergyConsumption += building.EnergyConsumption;
+                    _gameData.Production.TotalWorkers += building.CurrentWorkers;
+                    _gameData.Production.MaxWorkers += building.WorkersCapacity;
+                }
             }
 
             // Находим производство энергии (предполагаем, что есть ресурс типа Energy)
-            var energyResources = _gameData.Production.Resources.Where(r => r.ResourceType == ResourceType.Energy).ToList();
-            foreach (var resource in energyResources)
+            if (_gameData.Production.Resources != null) // Исправлено CS8602
             {
-                _gameData.Production.TotalEnergyProduction += resource.ProductionRate;
+                var energyResources = _gameData.Production.Resources.Where(r => r.ResourceType == ResourceType.Energy).ToList();
+                foreach (var resource in energyResources)
+                {
+                    _gameData.Production.TotalEnergyProduction += resource.ProductionRate;
+                }
             }
 
             // Генерируем балансы ресурсов
@@ -899,4 +923,3 @@ namespace CrustProductionViewer_MAUI.Services.Data
         }
     }
 }
-
