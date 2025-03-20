@@ -123,15 +123,15 @@ namespace CrustProductionViewer_MAUI.Views
                 var gameData = await _dataService.ScanDataAsync(progress);
 
                 // Отображаем результаты
-                if (gameData.Production.Resources.Count > 0 || gameData.Production.Buildings.Count > 0)
+                if (gameData != null && (gameData.Production?.Resources?.Count > 0 || gameData.Production?.Buildings?.Count > 0)) // Исправлено CS8602
                 {
-                    ResultsLabel.Text = $"Сканирование завершено. Найдено: {gameData.Production.Resources.Count} ресурсов, {gameData.Production.Buildings.Count} зданий";
+                    ResultsLabel.Text = $"Сканирование завершено. Найдено: {gameData.Production?.Resources?.Count ?? 0} ресурсов, {gameData.Production?.Buildings?.Count ?? 0} зданий";
 
                     // Отображаем найденные ресурсы
-                    await DisplayResourcesAsync(gameData);
+                    DisplayResources(gameData);
 
                     // Отображаем найденные здания
-                    await DisplayBuildingsAsync(gameData);
+                    DisplayBuildings(gameData);
                 }
                 else
                 {
@@ -177,12 +177,13 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private async Task DisplayResourcesAsync(GameData gameData)
+        // Изменено с async Task на void, так как нет операций await
+        private void DisplayResources(GameData gameData)
         {
             // Очищаем контейнер
             ResourcesStack.Children.Clear();
 
-            if (gameData.Production.Resources.Count > 0)
+            if (gameData?.Production?.Resources != null && gameData.Production.Resources.Count > 0) // Исправлено CS8602
             {
                 ResourcesStack.IsVisible = true;
 
@@ -198,8 +199,11 @@ namespace CrustProductionViewer_MAUI.Views
                 // Добавляем ресурсы
                 foreach (var resource in gameData.Production.Resources)
                 {
-                    var resourceElement = CreateResourceElement(resource);
-                    ResourcesStack.Children.Add(resourceElement);
+                    if (resource != null) // Проверка на null
+                    {
+                        var resourceElement = CreateResourceElement(resource);
+                        ResourcesStack.Children.Add(resourceElement);
+                    }
                 }
             }
             else
@@ -208,12 +212,13 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private async Task DisplayBuildingsAsync(GameData gameData)
+        // Изменено с async Task на void, так как нет операций await
+        private void DisplayBuildings(GameData gameData)
         {
             // Очищаем контейнер
             BuildingsStack.Children.Clear();
 
-            if (gameData.Production.Buildings.Count > 0)
+            if (gameData?.Production?.Buildings != null && gameData.Production.Buildings.Count > 0) // Исправлено CS8602
             {
                 BuildingsStack.IsVisible = true;
 
@@ -229,8 +234,11 @@ namespace CrustProductionViewer_MAUI.Views
                 // Добавляем здания
                 foreach (var building in gameData.Production.Buildings)
                 {
-                    var buildingElement = CreateBuildingElement(building);
-                    BuildingsStack.Children.Add(buildingElement);
+                    if (building != null) // Проверка на null
+                    {
+                        var buildingElement = CreateBuildingElement(building);
+                        BuildingsStack.Children.Add(buildingElement);
+                    }
                 }
             }
             else
