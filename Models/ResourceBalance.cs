@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -18,13 +19,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        private string resourceName;
+        private string resourceName = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        private string iconPath;
+        private string iconPath = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Общая скорость производства (единиц в минуту)
@@ -172,13 +173,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Тип здания
         /// </summary>
         [ObservableProperty]
-        private string buildingType;
+        private string buildingType = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Название здания
         /// </summary>
         [ObservableProperty]
-        private string buildingName;
+        private string buildingName = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Рекомендуемое изменение количества зданий
@@ -196,7 +197,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// Обоснование рекомендации
         /// </summary>
         [ObservableProperty]
-        private string justification;
+        private string justification = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Прогнозируемая эффективность после выполнения рекомендации (в процентах)
