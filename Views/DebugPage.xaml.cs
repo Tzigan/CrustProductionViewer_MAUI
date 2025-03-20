@@ -739,11 +739,5 @@ namespace CrustProductionViewer_MAUI.Views
 
         #endregion
 
-        // Метод InitializeComponent добавляется автоматически при компиляции XAML-файла
-        // Если это не происходит, то можно добавить его вручную:
-        private void InitializeComponent()
-        {
-            LoadFromXaml(typeof(DebugPage));
-        }
     }
 }

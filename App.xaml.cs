@@ -16,6 +16,9 @@ namespace CrustProductionViewer_MAUI
 
             // Сохраняем ссылку на сервис памяти для освобождения ресурсов при закрытии
             _memoryService = memoryService;
+
+            // Подписываемся на событие закрытия окна
+            Microsoft.Maui.Controls.Application.Current.Windows[0].Destroying += OnWindowDestroying;
         }
 
         protected override void OnStart()
@@ -38,8 +41,8 @@ namespace CrustProductionViewer_MAUI
             // Можно восстановить состояние или возобновить операции
         }
 
-        // Вызывается при завершении работы приложения
-        protected override void OnStop()
+        // Вызывается при закрытии окна приложения
+        private void OnWindowDestroying(object sender, EventArgs e)
         {
             // Безопасное отключение от процесса игры и освобождение ресурсов
             if (_memoryService != null && _memoryService.IsConnected)
@@ -48,9 +51,6 @@ namespace CrustProductionViewer_MAUI
             }
 
             _memoryService?.Dispose();
-
-            base.OnStop();
         }
     }
 }
-
