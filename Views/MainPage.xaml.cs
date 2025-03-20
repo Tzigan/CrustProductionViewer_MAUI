@@ -1,167 +1,172 @@
-using System.Text.RegularExpressions;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
+using CrustProductionViewer_MAUI.Services.Data;
+using Microsoft.Maui.Controls;
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CrustProductionViewer_MAUI.Views
 {
-    public partial class DebugPage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        // Статические поля для регулярных выражений
-        [GeneratedRegex("^[0-9A-Fa-f]+$")]
-        private static partial Regex HexRegex();
+        private readonly ICrustDataService _dataService;
+        private int _logoTapCount = 0;
 
-        // Статический экземпляр JsonSerializerOptions для повторного использования
-        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        public MainPage(ICrustDataService dataService)
         {
-            WriteIndented = true
-        };
+            InitializeComponent();
+            _dataService = dataService;
 
-        // Остальной код класса...
+            // Установка актуальной версии приложения
+            VersionLabel.Text = $"Версия: {AppInfo.VersionString}";
 
-        // В методе OnSaveResultsClicked замените:
-        private async void OnSaveResultsClicked(object sender, EventArgs e)
-        {
-            // Существующий код...
+            // Добавление обработчика нажатия на заголовок для секретного режима отладки
+            var titleTapGesture = new TapGestureRecognizer();
+            titleTapGesture.Tapped += OnLogoTapped;
 
-            try
+            // Применяем жест к заголовку страницы
+            // Вместо несуществующего AppImage используем другой элемент
+            // В данном случае, мы добавим жест к заголовку страницы
+            var titleLabel = this.FindByName<Label>("TitleLabel");
+            if (titleLabel != null)
             {
-                // Используем кэшированные опции JSON вместо создания новых
-                string json = JsonSerializer.Serialize(_lastScanData, _jsonOptions);
-                await File.WriteAllTextAsync(filePath, json);
-
-                // Остальной код...
+                titleLabel.GestureRecognizers.Add(titleTapGesture);
             }
-            catch (Exception ex)
+            else
             {
-                // Обработка ошибок...
-            }
-        }
-
-        // Сделать статическими методы согласно CA1822
-        private static byte[] HexStringToByteArray(string? hex)
-        {
-            // Проверка на null или пустую строку
-            if (string.IsNullOrEmpty(hex))
-            {
-                throw new ArgumentException("Шестнадцатеричная строка не может быть пустой или null", nameof(hex));
-            }
-
-            // Удаляем все пробелы и другие символы форматирования
-            hex = hex.Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("\n", "");
-
-            // Проверяем, что строка не пустая после удаления пробелов
-            if (string.IsNullOrEmpty(hex))
-            {
-                throw new ArgumentException("Шестнадцатеричная строка содержит только пробелы", nameof(hex));
-            }
-
-            // Преобразуем строку в байты
-            if (hex.Length % 2 != 0)
-            {
-                throw new ArgumentException("Строка шестнадцатеричных символов должна иметь четное количество цифр");
-            }
-
-            // Проверяем, что строка содержит только шестнадцатеричные символы
-            // Используем оптимизированный метод с GeneratedRegex
-            if (!HexRegex().IsMatch(hex))
-            {
-                throw new ArgumentException("Строка содержит недопустимые символы. Разрешены только шестнадцатеричные символы (0-9, A-F)", nameof(hex));
-            }
-
-            try
-            {
-                byte[] bytes = new byte[hex.Length / 2];
-                for (int i = 0; i < hex.Length; i += 2)
+                // Если TitleLabel не найден, добавляем жест к первой метке на странице
+                var firstLabel = this.FindByName<Label>("VersionLabel");
+                if (firstLabel != null)
                 {
-                    bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                    firstLabel.GestureRecognizers.Add(titleTapGesture);
                 }
-                return bytes;
-            }
-            catch (FormatException ex)
-            {
-                throw new ArgumentException("Ошибка при преобразовании шестнадцатеричной строки в байты", ex);
             }
         }
 
-        private static int ConvertHexOffsetToInt(string? hexOffset)
+        protected override void OnAppearing()
         {
-            // Проверка на null или пустую строку
-            if (string.IsNullOrEmpty(hexOffset))
-                return 0;
+            base.OnAppearing();
 
+            // Обновляем статус игры при каждом появлении страницы
+            UpdateGameStatus();
+        }
+
+        private void UpdateGameStatus()
+        {
             try
             {
-                // Удаляем все пробелы
-                hexOffset = hexOffset.Trim();
+                // Получаем статус подключения из сервиса данных
+                bool isConnected = _dataService.IsConnected;
+                DateTime? lastScan = _dataService.LastScanTime;
+                var gameData = _dataService.CurrentData;
 
-                if (hexOffset.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                if (isConnected)
                 {
-                    // Проверяем длину строки после префикса 0x
-                    if (hexOffset.Length <= 2)
-                    {
-                        // Если после 0x ничего нет, возвращаем 0
-                        return 0;
-                    }
-
-                    return Convert.ToInt32(hexOffset.Substring(2), 16);
+                    GameStatusLabel.Text = $"Статус игры: подключено ({gameData?.GameVersion ?? "Unknown"})";
+                    GameStatusLabel.TextColor = Color.FromArgb("#FF059669"); // Success color
                 }
                 else
                 {
-                    // Проверяем, что строка содержит только шестнадцатеричные символы
-                    // Используем оптимизированный метод с GeneratedRegex
-                    if (!HexRegex().IsMatch(hexOffset))
-                    {
-                        // Если строка содержит недопустимые символы, выводим предупреждение
-                        Debug.WriteLine($"Предупреждение: строка '{hexOffset}' содержит недопустимые символы");
-                        return 0;
-                    }
+                    GameStatusLabel.Text = "Статус игры: не подключено";
+                    GameStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
+                }
 
-                    return Convert.ToInt32(hexOffset, 16);
+                LastScanLabel.Text = lastScan.HasValue
+                    ? $"Последнее сканирование: {lastScan.Value:g}"
+                    : "Последнее сканирование: никогда";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при обновлении статуса игры: {ex.Message}");
+                GameStatusLabel.Text = "Статус игры: ошибка";
+                GameStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
+            }
+        }
+
+        private async void OnScanTapped(object sender, TappedEventArgs e)
+        {
+            // Анимация нажатия
+            await AnimateButtonTap(sender);
+
+            // Переход на страницу сканирования
+            await Shell.Current.GoToAsync("//scan");
+        }
+
+        private async void OnProductionTapped(object sender, TappedEventArgs e)
+        {
+            await AnimateButtonTap(sender);
+
+            // В будущем здесь будет страница производства
+            await DisplayAlert("Информация", "Страница анализа производства будет доступна в следующей версии.", "OK");
+        }
+
+        private async void OnCalculatorTapped(object sender, TappedEventArgs e)
+        {
+            await AnimateButtonTap(sender);
+
+            // Переход на страницу калькулятора
+            await Shell.Current.GoToAsync("//calculator");
+        }
+
+        private async void OnSettingsTapped(object sender, TappedEventArgs e)
+        {
+            await AnimateButtonTap(sender);
+
+            // В будущем здесь будет страница настроек
+            await DisplayAlert("Информация", "Страница настроек будет доступна в следующей версии.", "OK");
+        }
+
+        // Метод для анимации нажатия на кнопку
+        private static async Task AnimateButtonTap(object sender)
+        {
+            if (sender is Border border)
+            {
+                // Уменьшаем размер при нажатии
+                await border.ScaleTo(0.95, 50, Easing.CubicOut);
+
+                // Возвращаем исходный размер
+                await border.ScaleTo(1, 50, Easing.CubicIn);
+            }
+        }
+
+        // Обработчик нажатия на лого для секретного режима отладки
+        private async void OnLogoTapped(object sender, EventArgs e)
+        {
+            _logoTapCount++;
+
+            if (_logoTapCount >= 3)
+            {
+                _logoTapCount = 0;
+
+                try
+                {
+                    // Попытка перейти на страницу отладки
+                    await Shell.Current.GoToAsync("//debug");
+                }
+                catch (Exception ex)
+                {
+                    // Если страница не зарегистрирована, показываем сообщение
+                    Debug.WriteLine($"Ошибка перехода на страницу отладки: {ex.Message}");
+                    await DisplayAlert("Отладка", "Страница отладки не зарегистрирована.", "OK");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                // Обрабатываем ошибки
-                Debug.WriteLine($"Ошибка при преобразовании '{hexOffset}': {ex.Message}");
-                return 0;
+                // Сбрасываем счетчик через 3 секунды, если не было 3 нажатий
+                _ = Task.Delay(3000).ContinueWith(_ => _logoTapCount = 0, TaskScheduler.Current);
             }
         }
 
-        private static IntPtr CalculateAddressFromSignature(IntPtr signatureAddress, int offset, WindowsMemoryService memoryService)
+        // Метод для автоматического обновления статуса каждые 5 секунд (опционально)
+        private async Task StartStatusUpdateTimer()
         {
-            // Чтение относительного смещения
-            int relativeOffset = memoryService.Read<int>(IntPtr.Add(signatureAddress, offset));
-
-            // Вычисление абсолютного адреса
-            // Адрес инструкции + смещение от сигнатуры до смещения + 4 (размер int) + значение смещения
-            long absoluteAddress = signatureAddress.ToInt64() + offset + 4 + relativeOffset;
-
-            return new IntPtr(absoluteAddress);
-        }
-
-        // В ваших методах, использующих эти методы, передавайте необходимые параметры
-        // Например, для CalculateAddressFromSignature:
-        private async void OnTestResourceSignatureClicked(object sender, EventArgs e)
-        {
-            // ... ваш код ...
-
-            try
+            while (true)
             {
-                // Пытаемся вычислить реальный адрес списка
-                IntPtr calculatedAddress = CalculateAddressFromSignature(
-                    resultAddress,
-                    MemorySignatures.ResourceListOffset,
-                    _memoryService);
-
-                // ... остальной код ...
-            }
-            catch (Exception ex)
-            {
-                // ... обработка ошибок ...
+                await Task.Delay(5000);
+                if (this.IsVisible)
+                {
+                    Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(UpdateGameStatus);
+                }
             }
         }
-
-        // Остальные методы класса...
     }
 }
