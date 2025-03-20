@@ -897,7 +897,7 @@ namespace CrustProductionViewer_MAUI.Services.Data
                 // Проверяем совместимость с текущей версией игры
                 if (loadedMap.GameVersion == _gameData.GameVersion)
                 {
-                    _addressMap = loadedMap;
+                    _addressMap.CopyFrom(loadedMap);
                     return true;
                 }
             }

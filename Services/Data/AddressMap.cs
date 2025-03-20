@@ -131,7 +131,37 @@ namespace CrustProductionViewer_MAUI.Services.Data
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "CrustProductionViewer",
-                "address_map.json");
+                "address_map.json"
+            );
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void CopyFrom(AddressMap other)
+        {
+            if (other == null)
+                return;
+
+            ResourceListAddress = other.ResourceListAddress;
+            BuildingListAddress = other.BuildingListAddress;
+            GameVersion = other.GameVersion;
+            CreationTime = other.CreationTime;
+            BaseModuleName = other.BaseModuleName;
+            BaseModuleAddress = other.BaseModuleAddress;
+
+            ResourceAddresses.Clear();
+            foreach (var kvp in other.ResourceAddresses)
+            {
+                ResourceAddresses[kvp.Key] = kvp.Value;
+            }
+
+            BuildingAddresses.Clear();
+            foreach (var kvp in other.BuildingAddresses)
+            {
+                BuildingAddresses[kvp.Key] = kvp.Value;
+            }
+        }
+
     }
 }
