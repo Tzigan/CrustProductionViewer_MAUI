@@ -129,7 +129,8 @@ namespace CrustProductionViewer_MAUI.Views
         }
 
         // Обработчик нажатия на лого для секретного режима отладки
-        private async void OnLogoTapped(object sender, EventArgs e)
+        // Обработчик нажатия на лого для секретного режима отладки
+        private async void OnLogoTapped(object? sender, TappedEventArgs e)
         {
             _logoTapCount++;
 
