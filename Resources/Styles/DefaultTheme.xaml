@@ -18,7 +18,7 @@
     <!-- ����� ��� ������� -->
     <Style TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark=#262626}" />
-        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
         <Setter Property="HasShadow" Value="True" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Padding" Value="15" />
