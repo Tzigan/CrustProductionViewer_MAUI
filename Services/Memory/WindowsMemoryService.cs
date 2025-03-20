@@ -87,9 +87,8 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 ? stackalloc byte[size]
                 : new byte[size];
 
-            IntPtr bytesRead;
             // Встраиваем результат вызова функции непосредственно в условие
-            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, size, out bytesRead) ||
+            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, size, out nint bytesRead) ||
                 bytesRead.ToInt32() != size)
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
 
@@ -107,17 +106,16 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                 ? stackalloc byte[maxLength]
                 : new byte[maxLength];
 
-            IntPtr bytesRead;
             // Встраиваем результат вызова функции непосредственно в условие
-            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, maxLength, out bytesRead))
+            if (!NativeMethods.ReadProcessMemory(_processHandle, address, buffer, maxLength, out nint bytesRead))
                 throw new InvalidOperationException($"Не удалось прочитать память по адресу {address}");
 
             // Определяем конец строки (нулевой байт)
-            int nullTerminatorIndex = buffer.Slice(0, bytesRead.ToInt32()).IndexOf((byte)0);
+            int nullTerminatorIndex = buffer[..bytesRead.ToInt32()].IndexOf((byte)0);
             if (nullTerminatorIndex < 0)
                 nullTerminatorIndex = bytesRead.ToInt32();
 
-            return Encoding.UTF8.GetString(buffer.Slice(0, nullTerminatorIndex));
+            return Encoding.UTF8.GetString(buffer[..nullTerminatorIndex]);
         }
 
         public bool Write<T>(IntPtr address, T value) where T : struct
@@ -135,9 +133,8 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             // Записываем значение в буфер (используем in вместо ref)
             MemoryMarshal.Write(buffer, in value);
 
-            IntPtr bytesWritten;
             return NativeMethods.WriteProcessMemory(_processHandle, address,
-                buffer, size, out bytesWritten);
+                buffer, size, out nint bytesWritten);
         }
 
         public IEnumerable<IntPtr> ScanMemory<T>(T value) where T : struct
@@ -145,11 +142,10 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             if (!IsConnected)
                 throw new InvalidOperationException("Не выполнено подключение к процессу");
 
-            List<IntPtr> results = new List<IntPtr>();
+            List<IntPtr> results = [];
 
             // Получаем информацию о системе для определения диапазона адресов
-            NativeMethods.SYSTEM_INFO sysInfo;
-            NativeMethods.GetSystemInfo(out sysInfo);
+            NativeMethods.GetSystemInfo(out NativeMethods.SYSTEM_INFO sysInfo);
 
             // Поисковый шаблон
             int valueSize = Unsafe.SizeOf<T>();
@@ -166,12 +162,11 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
             while (currentAddress.ToInt64() < sysInfo.lpMaximumApplicationAddress.ToInt64())
             {
-                NativeMethods.MEMORY_BASIC_INFORMATION memInfo;
 
                 if (NativeMethods.VirtualQueryEx(
                     _processHandle,
                     currentAddress,
-                    out memInfo,
+                    out NativeMethods.MEMORY_BASIC_INFORMATION memInfo,
                     (uint)Marshal.SizeOf<NativeMethods.MEMORY_BASIC_INFORMATION>()))
                 {
                     // Проверяем только доступные для чтения области памяти
@@ -188,11 +183,10 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                             // Арендуем буфер из пула памяти
                             using IMemoryOwner<byte> memoryOwner = memoryPool.Rent(regionSize);
                             Memory<byte> memory = memoryOwner.Memory;
-                            Span<byte> buffer = memory.Span.Slice(0, regionSize);
+                            Span<byte> buffer = memory.Span[..regionSize];
 
-                            IntPtr bytesRead;
                             if (NativeMethods.ReadProcessMemory(_processHandle, memInfo.BaseAddress,
-                                buffer, regionSize, out bytesRead))
+                                buffer, regionSize, out nint bytesRead))
                             {
                                 // Получаем фактический размер прочитанных данных
                                 int actualBytesRead = bytesRead.ToInt32();
@@ -236,11 +230,10 @@ namespace CrustProductionViewer_MAUI.Services.Memory
             if (!IsConnected)
                 throw new InvalidOperationException("Не выполнено подключение к процессу");
 
-            List<IntPtr> results = new List<IntPtr>();
+            List<IntPtr> results = [];
 
             // Получаем информацию о системе для определения диапазона адресов
-            NativeMethods.SYSTEM_INFO sysInfo;
-            NativeMethods.GetSystemInfo(out sysInfo);
+            NativeMethods.GetSystemInfo(out NativeMethods.SYSTEM_INFO sysInfo);
 
             // Поисковый шаблон - строка в байтах (UTF-8)
             byte[] searchBytes = Encoding.UTF8.GetBytes(value);
@@ -255,12 +248,11 @@ namespace CrustProductionViewer_MAUI.Services.Memory
 
             while (currentAddress.ToInt64() < sysInfo.lpMaximumApplicationAddress.ToInt64())
             {
-                NativeMethods.MEMORY_BASIC_INFORMATION memInfo;
 
                 if (NativeMethods.VirtualQueryEx(
                     _processHandle,
                     currentAddress,
-                    out memInfo,
+                    out NativeMethods.MEMORY_BASIC_INFORMATION memInfo,
                     (uint)Marshal.SizeOf<NativeMethods.MEMORY_BASIC_INFORMATION>()))
                 {
                     // Проверяем только доступные для чтения области памяти
@@ -277,17 +269,16 @@ namespace CrustProductionViewer_MAUI.Services.Memory
                             // Арендуем буфер из пула памяти
                             using IMemoryOwner<byte> memoryOwner = memoryPool.Rent(regionSize);
                             Memory<byte> memory = memoryOwner.Memory;
-                            Span<byte> buffer = memory.Span.Slice(0, regionSize);
+                            Span<byte> buffer = memory.Span[..regionSize];
 
-                            IntPtr bytesRead;
                             if (NativeMethods.ReadProcessMemory(_processHandle, memInfo.BaseAddress,
-                                buffer, regionSize, out bytesRead))
+                                buffer, regionSize, out nint bytesRead))
                             {
                                 // Получаем фактический размер прочитанных данных
                                 int actualBytesRead = bytesRead.ToInt32();
 
                                 // Эффективный поиск строки в буфере
-                                Span<byte> workBuffer = buffer.Slice(0, actualBytesRead);
+                                Span<byte> workBuffer = buffer[..actualBytesRead];
                                 int limit = actualBytesRead - searchLength;
 
                                 for (int i = 0; i <= limit; i++)
