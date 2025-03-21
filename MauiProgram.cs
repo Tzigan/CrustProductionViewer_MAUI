@@ -56,7 +56,6 @@ namespace CrustProductionViewer_MAUI
                 var dataService = provider.GetRequiredService<ICrustDataService>();
                 return new ScanPage(dataService);
             });
-            builder.Services.AddTransient<ScanPageContainer>();
             builder.Services.AddTransient<CalculatorPage>();
             builder.Services.AddTransient<DebugPage>();
 

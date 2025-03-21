@@ -13,14 +13,10 @@
         Route="main" />
 
     <ShellContent
-        Title="Сканирование"
-        ContentTemplate="{DataTemplate views:ScanPageContainer}"
-        Route="scan" />
-
-    <ShellContent
         Title="Калькулятор"
         ContentTemplate="{DataTemplate views:CalculatorPage}"
         Route="calculator" />
 
 </Shell>
+
 

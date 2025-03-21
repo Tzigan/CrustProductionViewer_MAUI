@@ -87,34 +87,33 @@ namespace CrustProductionViewer_MAUI.Views
 
             try
             {
-                Debug.WriteLine("Переход на страницу сканирования...");
+                Debug.WriteLine("Создание и открытие ScanPage напрямую...");
 
-                // Переход на страницу сканирования через контейнер
-                await Shell.Current.GoToAsync("//scan");
+                // Получаем сервис данных из DI
+                if (_dataService != null)
+                {
+                    // Создаем страницу напрямую с передачей зависимости
+                    var scanPage = new ScanPage(_dataService);
 
-                Debug.WriteLine("Переход на страницу сканирования выполнен успешно");
+                    // Переходим на созданную страницу
+                    await Navigation.PushAsync(scanPage);
+
+                    Debug.WriteLine("Переход на ScanPage выполнен успешно");
+                }
+                else
+                {
+                    Debug.WriteLine("ОШИБКА: _dataService не доступен");
+                    await DisplayAlert("Ошибка", "Сервис данных недоступен", "OK");
+                }
             }
             catch (Exception ex)
             {
                 // Логирование ошибки
-                Debug.WriteLine($"Ошибка при переходе на страницу сканирования: {ex.Message}");
+                Debug.WriteLine($"Ошибка при создании и открытии ScanPage: {ex.Message}");
                 Debug.WriteLine($"Стек вызовов: {ex.StackTrace}");
 
                 // Информируем пользователя
                 await DisplayAlert("Ошибка", $"Не удалось открыть страницу сканирования: {ex.Message}", "OK");
-
-                // Попробуем альтернативный подход как запасной вариант
-                try
-                {
-                    Debug.WriteLine("Пробуем альтернативный подход через Navigation.PushAsync...");
-                    await Navigation.PushAsync(new ScanPageContainer());
-                    Debug.WriteLine("Альтернативный переход выполнен успешно");
-                }
-                catch (Exception ex2)
-                {
-                    Debug.WriteLine($"Ошибка альтернативного перехода: {ex2.Message}");
-                    await DisplayAlert("Ошибка", "Все способы навигации завершились с ошибкой.", "OK");
-                }
             }
         }
 
