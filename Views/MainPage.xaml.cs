@@ -24,8 +24,6 @@ namespace CrustProductionViewer_MAUI.Views
             titleTapGesture.Tapped += OnLogoTapped;
 
             // Применяем жест к заголовку страницы
-            // Вместо несуществующего AppImage используем другой элемент
-            // В данном случае, мы добавим жест к заголовку страницы
             var titleLabel = this.FindByName<Label>("TitleLabel");
             if (titleLabel != null)
             {
@@ -87,8 +85,37 @@ namespace CrustProductionViewer_MAUI.Views
             // Анимация нажатия
             await AnimateButtonTap(sender);
 
-            // Переход на страницу сканирования
-            await Shell.Current.GoToAsync("//scan");
+            try
+            {
+                Debug.WriteLine("Переход на страницу сканирования...");
+
+                // Переход на страницу сканирования через контейнер
+                await Shell.Current.GoToAsync("//scan");
+
+                Debug.WriteLine("Переход на страницу сканирования выполнен успешно");
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки
+                Debug.WriteLine($"Ошибка при переходе на страницу сканирования: {ex.Message}");
+                Debug.WriteLine($"Стек вызовов: {ex.StackTrace}");
+
+                // Информируем пользователя
+                await DisplayAlert("Ошибка", $"Не удалось открыть страницу сканирования: {ex.Message}", "OK");
+
+                // Попробуем альтернативный подход как запасной вариант
+                try
+                {
+                    Debug.WriteLine("Пробуем альтернативный подход через Navigation.PushAsync...");
+                    await Navigation.PushAsync(new ScanPageContainer());
+                    Debug.WriteLine("Альтернативный переход выполнен успешно");
+                }
+                catch (Exception ex2)
+                {
+                    Debug.WriteLine($"Ошибка альтернативного перехода: {ex2.Message}");
+                    await DisplayAlert("Ошибка", "Все способы навигации завершились с ошибкой.", "OK");
+                }
+            }
         }
 
         private async void OnProductionTapped(object sender, TappedEventArgs e)
@@ -140,7 +167,9 @@ namespace CrustProductionViewer_MAUI.Views
                 try
                 {
                     // Попытка перейти на страницу отладки
+                    Debug.WriteLine("Попытка перехода на страницу отладки...");
                     await Shell.Current.GoToAsync("debug");
+                    Debug.WriteLine("Переход на страницу отладки выполнен успешно");
                 }
                 catch (Exception ex)
                 {

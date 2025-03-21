@@ -14,7 +14,7 @@
 
     <ShellContent
         Title="Сканирование"
-        ContentTemplate="{DataTemplate views:ScanPage}"
+        ContentTemplate="{DataTemplate views:ScanPageContainer}"
         Route="scan" />
 
     <ShellContent

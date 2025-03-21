@@ -17,26 +17,22 @@ namespace CrustProductionViewer_MAUI.Views
         public ScanPage()
         {
             InitializeComponent();
-
             try
             {
-                // Получаем сервис из контейнера DI
-                _dataService = Application.Current?.Handler?.MauiContext?.Services?.GetService<ICrustDataService>();
-
-                if (_dataService == null)
+                // Даже если не найдет сервис, страница будет открыта
+                var dataService = Application.Current?.Handler?.MauiContext?.Services.GetService<ICrustDataService>();
+                if (dataService != null)
                 {
-                    Debug.WriteLine("ВНИМАНИЕ: ICrustDataService не найден в контейнере DI");
-                    // Информируем пользователя о проблеме
-                    Device.BeginInvokeOnMainThread(async () => {
-                        await DisplayAlert("Ошибка инициализации",
-                            "Не удалось получить сервис данных. Функциональность страницы ограничена.",
-                            "OK");
-                    });
+                    _dataService = dataService;
+                }
+                else
+                {
+                    Debug.WriteLine("ICrustDataService не найден в DI контейнере");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ошибка получения ICrustDataService: {ex.Message}");
+                Debug.WriteLine($"Ошибка в конструкторе ScanPage: {ex.Message}");
             }
         }
 
@@ -431,6 +427,11 @@ namespace CrustProductionViewer_MAUI.Views
 
             border.Content = grid;
             return border;
+        }
+
+        internal void LoadContent()
+        {
+            throw new NotImplementedException();
         }
     }
 }
