@@ -14,156 +14,160 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор типа здания
         /// </summary>
         [ObservableProperty]
-        public int Id { get; set; }
+        private int id;
 
         /// <summary>
         /// Название типа здания
         /// </summary>
         [ObservableProperty]
-        public string Name { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание типа здания
         /// </summary>
         [ObservableProperty]
-        public string Description { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Категория здания
         /// </summary>
         [ObservableProperty]
-        public BuildingType BuildingType { get; set; }
+        private BuildingType buildingType;
 
         /// <summary>
         /// Базовое потребление энергии
         /// </summary>
         [ObservableProperty]
-        public double BaseEnergyConsumption { get; set; }
+        private double baseEnergyConsumption;
 
         /// <summary>
         /// Базовое количество рабочих мест
         /// </summary>
         [ObservableProperty]
-        public int BaseWorkersCapacity { get; set; }
+        private int baseWorkersCapacity;
 
         /// <summary>
         /// Путь к иконке типа здания
         /// </summary>
         [ObservableProperty]
-        public string IconPath { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Конфигурация производимых ресурсов
         /// </summary>
         [ObservableProperty]
-        public List<ResourceProductionConfig> ProducedResources { get; set; } = new();
+        private List<ResourceProductionConfig> producedResources = new();
 
         /// <summary>
         /// Конфигурация потребляемых ресурсов
         /// </summary>
         [ObservableProperty]
-        public List<ResourceConsumptionConfig> ConsumedResources { get; set; } = new();
+        private List<ResourceConsumptionConfig> consumedResources = new();
 
         /// <summary>
         /// Стоимость строительства (ресурсы)
         /// </summary>
         [ObservableProperty]
-        public List<BuildingCost> ConstructionCosts { get; set; } = new();
+        private List<BuildingCost> constructionCosts = new();
 
         /// <summary>
         /// Коэффициенты улучшения по уровням
         /// </summary>
         [ObservableProperty]
-        public List<LevelUpgrade> LevelUpgrades { get; set; } = new();
+        private List<LevelUpgrade> levelUpgrades = new();
 
         /// <summary>
         /// Сигнатура в памяти для поиска зданий этого типа
         /// </summary>
         [ObservableProperty]
-        public byte[]? MemorySignature { get; set; }
+        private byte[]? memorySignature;
     }
 
     /// <summary>
     /// Конфигурация производства ресурса
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class ResourceProductionConfig : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Базовая скорость производства (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double BaseProductionRate { get; set; }
+        private double baseProductionRate;
     }
 
     /// <summary>
     /// Конфигурация потребления ресурса
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class ResourceConsumptionConfig : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Базовая скорость потребления (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double BaseConsumptionRate { get; set; }
+        private double baseConsumptionRate;
     }
 
     /// <summary>
     /// Стоимость строительства здания
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class BuildingCost : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Требуемое количество
         /// </summary>
         [ObservableProperty]
-        public double Amount { get; set; }
+        private double amount;
     }
 
     /// <summary>
     /// Улучшение здания при повышении уровня
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class LevelUpgrade : ObservableObject
     {
         /// <summary>
         /// Уровень здания
         /// </summary>
         [ObservableProperty]
-        public int Level { get; set; }
+        private int level;
 
         /// <summary>
         /// Множитель скорости производства
         /// </summary>
         [ObservableProperty]
-        public double ProductionMultiplier { get; set; }
+        private double productionMultiplier;
 
         /// <summary>
         /// Множитель потребления энергии
         /// </summary>
         [ObservableProperty]
-        public double EnergyConsumptionMultiplier { get; set; }
+        private double energyConsumptionMultiplier;
 
         /// <summary>
         /// Множитель количества рабочих
         /// </summary>
         [ObservableProperty]
-        public double WorkersMultiplier { get; set; }
+        private double workersMultiplier;
     }
 }
