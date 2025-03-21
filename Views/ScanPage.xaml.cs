@@ -4,14 +4,43 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace CrustProductionViewer_MAUI.Views
 {
     public partial class ScanPage : ContentPage
     {
-        private readonly ICrustDataService _dataService;
+        private ICrustDataService? _dataService;
         private bool _isScanningActive = false;
 
+        // Конструктор без параметров для XAML
+        public ScanPage()
+        {
+            InitializeComponent();
+
+            try
+            {
+                // Получаем сервис из контейнера DI
+                _dataService = Application.Current?.Handler?.MauiContext?.Services?.GetService<ICrustDataService>();
+
+                if (_dataService == null)
+                {
+                    Debug.WriteLine("ВНИМАНИЕ: ICrustDataService не найден в контейнере DI");
+                    // Информируем пользователя о проблеме
+                    Device.BeginInvokeOnMainThread(async () => {
+                        await DisplayAlert("Ошибка инициализации",
+                            "Не удалось получить сервис данных. Функциональность страницы ограничена.",
+                            "OK");
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка получения ICrustDataService: {ex.Message}");
+            }
+        }
+
+        // Существующий конструктор с параметром
         public ScanPage(ICrustDataService dataService)
         {
             InitializeComponent();
@@ -21,11 +50,27 @@ namespace CrustProductionViewer_MAUI.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            UpdateConnectionStatus();
+
+            // Добавим проверку на null перед использованием
+            if (_dataService != null)
+            {
+                UpdateConnectionStatus();
+            }
+            else
+            {
+                // Если сервис недоступен, показываем информацию пользователю
+                ConnectionStatusLabel.Text = "Сервис данных недоступен";
+                ConnectionStatusLabel.TextColor = Colors.Red;
+                ScanStatusLabel.Text = "Невозможно получить доступ к функциям сканирования";
+                ScanButton.IsEnabled = false;
+                ConnectButton.IsEnabled = false;
+            }
         }
 
         private void UpdateConnectionStatus()
         {
+            if (_dataService == null) return;
+
             bool isConnected = _dataService.IsConnected;
 
             if (isConnected)
@@ -56,6 +101,12 @@ namespace CrustProductionViewer_MAUI.Views
 
         private async void OnConnectClicked(object sender, EventArgs e)
         {
+            if (_dataService == null)
+            {
+                await DisplayAlert("Ошибка", "Сервис данных недоступен", "OK");
+                return;
+            }
+
             if (_isScanningActive)
                 return;
 
@@ -100,6 +151,12 @@ namespace CrustProductionViewer_MAUI.Views
 
         private async void OnScanClicked(object sender, EventArgs e)
         {
+            if (_dataService == null)
+            {
+                await DisplayAlert("Ошибка", "Сервис данных недоступен", "OK");
+                return;
+            }
+
             if (_isScanningActive || !_dataService.IsConnected)
             {
                 await DisplayAlert("Информация", "Сканирование уже выполняется или отсутствует подключение к игре", "OK");
