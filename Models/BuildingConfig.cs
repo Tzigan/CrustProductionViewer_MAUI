@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
 {
+    [SupportedOSPlatform("windows")]
     /// <summary>
     /// Представляет конфигурацию типа здания
     /// </summary>
