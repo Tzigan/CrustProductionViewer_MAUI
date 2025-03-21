@@ -4,7 +4,6 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
 using System;
 
-
 namespace CrustProductionViewer_MAUI
 {
     public partial class App : Application
@@ -27,8 +26,8 @@ namespace CrustProductionViewer_MAUI
         // Переопределяем метод создания окна
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // Создаем базовое окно
-            Window window = base.CreateWindow(activationState);
+            // Создаем новое окно напрямую вместо вызова базового метода
+            Window window = new Window();
 
             // Устанавливаем AppShell как корневую страницу окна
             // Используем _serviceProvider для создания AppShell с зависимостями
