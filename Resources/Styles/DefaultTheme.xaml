@@ -67,17 +67,17 @@
     </Style>
 
     <!-- Стиль для успешных кнопок -->
-    <Style TargetType="Button" x:Key="SuccessButton" BasedOn="{StaticResource Key={x:Type Button}}">
+    <Style TargetType="Button" x:Key="SuccessButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Success}, Dark=#065F46}" />
     </Style>
 
     <!-- Стиль для кнопок с предупреждением -->
-    <Style TargetType="Button" x:Key="WarningButton" BasedOn="{StaticResource Key={x:Type Button}}">
+    <Style TargetType="Button" x:Key="WarningButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Warning}, Dark=#92400E}" />
     </Style>
 
     <!-- Стиль для опасных кнопок -->
-    <Style TargetType="Button" x:Key="DangerButton" BasedOn="{StaticResource Key={x:Type Button}}">
+    <Style TargetType="Button" x:Key="DangerButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Danger}, Dark=#991B1B}" />
     </Style>
 
