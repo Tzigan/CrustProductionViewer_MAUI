@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -7,103 +8,104 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Представляет строение в игре The Crust.
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class Building : ObservableObject
     {
         /// <summary>
         /// Уникальный идентификатор строения
         /// </summary>
         [ObservableProperty]
-        public int Id { get; set; }
+        private int id;
 
         /// <summary>
         /// Название строения
         /// </summary>
         [ObservableProperty]
-        public string Name { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание строения
         /// </summary>
         [ObservableProperty]
-        public string Description { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Тип строения
         /// </summary>
         [ObservableProperty]
-        public BuildingType BuildingType { get; set; }
+        private BuildingType buildingType;
 
         /// <summary>
         /// Уровень строения
         /// </summary>
         [ObservableProperty]
-        public int Level { get; set; }
+        private int level;
 
         /// <summary>
         /// Эффективность строения (0.0 - 1.0)
         /// </summary>
         [ObservableProperty]
-        public double Efficiency { get; set; }
+        private double efficiency;
 
         /// <summary>
         /// Потребляемая энергия
         /// </summary>
         [ObservableProperty]
-        public double EnergyConsumption { get; set; }
+        private double energyConsumption;
 
         /// <summary>
         /// Количество рабочих мест
         /// </summary>
         [ObservableProperty]
-        public int WorkersCapacity { get; set; }
+        private int workersCapacity;
 
         /// <summary>
         /// Текущее количество работников
         /// </summary>
         [ObservableProperty]
-        public int CurrentWorkers { get; set; }
+        private int currentWorkers;
 
         /// <summary>
         /// Путь к иконке строения
         /// </summary>
         [ObservableProperty]
-        public string IconPath { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Адрес в памяти для данных этого строения
         /// </summary>
         [ObservableProperty]
-        public IntPtr MemoryAddress { get; set; }
+        private IntPtr memoryAddress;
 
         /// <summary>
         /// Ресурсы, производимые этим строением
         /// </summary>
         [ObservableProperty]
-        public List<ResourceProduction> ProducedResources { get; set; } = new();
+        private List<ResourceProduction> producedResources = new();
 
         /// <summary>
         /// Ресурсы, потребляемые этим строением
         /// </summary>
         [ObservableProperty]
-        public List<ResourceConsumption> ConsumedResources { get; set; } = new();
+        private List<ResourceConsumption> consumedResources = new();
 
         /// <summary>
         /// Активно ли строение
         /// </summary>
         [ObservableProperty]
-        public bool IsActive { get; set; }
+        private bool isActive;
 
         /// <summary>
         /// Причина неактивности строения (если есть)
         /// </summary>
         [ObservableProperty]
-        public string InactiveReason { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string inactiveReason = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Расположение строения (координаты)
         /// </summary>
         [ObservableProperty]
-        public BuildingLocation Location { get; set; } = new(); // Инициализация новым экземпляром
+        private BuildingLocation location = new(); // Инициализация новым экземпляром
 
         /// <summary>
         /// Фактическая эффективность с учетом всех факторов
@@ -156,72 +158,76 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Представляет информацию о производстве ресурса строением
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class ResourceProduction : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Базовая скорость производства (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double BaseProductionRate { get; set; }
+        private double baseProductionRate;
 
         /// <summary>
         /// Фактическая скорость производства с учетом эффективности
         /// </summary>
         [ObservableProperty]
-        public double ActualProductionRate { get; set; }
+        private double actualProductionRate;
     }
 
     /// <summary>
     /// Представляет информацию о потреблении ресурса строением
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class ResourceConsumption : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Базовая скорость потребления (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double BaseConsumptionRate { get; set; }
+        private double baseConsumptionRate;
 
         /// <summary>
         /// Фактическая скорость потребления с учетом эффективности
         /// </summary>
         [ObservableProperty]
-        public double ActualConsumptionRate { get; set; }
+        private double actualConsumptionRate;
     }
 
     /// <summary>
     /// Расположение строения в игровом мире
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class BuildingLocation : ObservableObject
     {
         /// <summary>
         /// Координата X
         /// </summary>
         [ObservableProperty]
-        public double X { get; set; }
+        private double x;
 
         /// <summary>
         /// Координата Y
         /// </summary>
         [ObservableProperty]
-        public double Y { get; set; }
+        private double y;
 
         /// <summary>
         /// Координата Z
         /// </summary>
         [ObservableProperty]
-        public double Z { get; set; }
+        private double z;
     }
 }
+
