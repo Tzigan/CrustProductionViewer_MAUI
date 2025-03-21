@@ -12,61 +12,61 @@ namespace CrustProductionViewer_MAUI.Models
         /// Уникальный идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        private int id;
+        public int Id { get; set; }
 
         /// <summary>
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        private string name = string.Empty; // Инициализация пустой строкой
+        public string Name { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание ресурса
         /// </summary>
         [ObservableProperty]
-        private string description = string.Empty; // Инициализация пустой строкой
+        public string Description { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Текущее количество ресурса
         /// </summary>
         [ObservableProperty]
-        private double currentAmount;
+        public double CurrentAmount { get; set; }
 
         /// <summary>
         /// Максимальная вместимость ресурса
         /// </summary>
         [ObservableProperty]
-        private double maxCapacity;
+        public double MaxCapacity { get; set; }
 
         /// <summary>
         /// Скорость производства ресурса (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double productionRate;
+        public double ProductionRate { get; set; }
 
         /// <summary>
         /// Скорость потребления ресурса (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double consumptionRate;
+        public double ConsumptionRate { get; set; }
 
         /// <summary>
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        private string iconPath = string.Empty; // Инициализация пустой строкой
+        public string IconPath { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Адрес в памяти для данных этого ресурса
         /// </summary>
         [ObservableProperty]
-        private IntPtr memoryAddress;
+        public IntPtr MemoryAddress { get; set; }
 
         /// <summary>
         /// Тип ресурса (категория)
         /// </summary>
         [ObservableProperty]
-        private ResourceType resourceType;
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Вычисляет баланс производства (производство - потребление)

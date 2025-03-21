@@ -14,31 +14,31 @@ namespace CrustProductionViewer_MAUI.Models
         /// Время последнего обновления данных
         /// </summary>
         [ObservableProperty]
-        private DateTime lastUpdated;
+        public DateTime LastUpdated { get; set; }
 
         /// <summary>
         /// Список всех ресурсов в игре
         /// </summary>
         [ObservableProperty]
-        private List<GameResource> resources = [];
+        public List<GameResource> Resources { get; set; } = [];
 
         /// <summary>
         /// Список всех строений в игре
         /// </summary>
         [ObservableProperty]
-        private List<Building> buildings = [];
+        public List<Building> Buildings { get; set; } = [];
 
         /// <summary>
         /// Общая потребляемая энергия
         /// </summary>
         [ObservableProperty]
-        private double totalEnergyConsumption;
+        public double TotalEnergyConsumption { get; set; }
 
         /// <summary>
         /// Общая производимая энергия
         /// </summary>
         [ObservableProperty]
-        private double totalEnergyProduction;
+        public double TotalEnergyProduction { get; set; }
 
         /// <summary>
         /// Баланс энергии (производство - потребление)
@@ -54,13 +54,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Общее количество работников
         /// </summary>
         [ObservableProperty]
-        private int totalWorkers;
+        public int TotalWorkers { get; set; }
 
         /// <summary>
         /// Максимальная вместимость работников
         /// </summary>
         [ObservableProperty]
-        private int maxWorkers;
+        public int MaxWorkers { get; set; }
 
         /// <summary>
         /// Получает ресурс по его ID

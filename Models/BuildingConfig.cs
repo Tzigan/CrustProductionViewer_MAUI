@@ -14,73 +14,73 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор типа здания
         /// </summary>
         [ObservableProperty]
-        private int id;
+        public int Id { get; set; }
 
         /// <summary>
         /// Название типа здания
         /// </summary>
         [ObservableProperty]
-        private string name = string.Empty; // Инициализация пустой строкой
+        public string Name { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание типа здания
         /// </summary>
         [ObservableProperty]
-        private string description = string.Empty; // Инициализация пустой строкой
+        public string Description { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Категория здания
         /// </summary>
         [ObservableProperty]
-        private BuildingType buildingType;
+        public BuildingType BuildingType { get; set; }
 
         /// <summary>
         /// Базовое потребление энергии
         /// </summary>
         [ObservableProperty]
-        private double baseEnergyConsumption;
+        public double BaseEnergyConsumption { get; set; }
 
         /// <summary>
         /// Базовое количество рабочих мест
         /// </summary>
         [ObservableProperty]
-        private int baseWorkersCapacity;
+        public int BaseWorkersCapacity { get; set; }
 
         /// <summary>
         /// Путь к иконке типа здания
         /// </summary>
         [ObservableProperty]
-        private string iconPath = string.Empty; // Инициализация пустой строкой
+        public string IconPath { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Конфигурация производимых ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceProductionConfig> producedResources = [];
+        public List<ResourceProductionConfig> ProducedResources { get; set; } = new();
 
         /// <summary>
         /// Конфигурация потребляемых ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceConsumptionConfig> consumedResources = [];
+        public List<ResourceConsumptionConfig> ConsumedResources { get; set; } = new();
 
         /// <summary>
         /// Стоимость строительства (ресурсы)
         /// </summary>
         [ObservableProperty]
-        private List<BuildingCost> constructionCosts = [];
+        public List<BuildingCost> ConstructionCosts { get; set; } = new();
 
         /// <summary>
         /// Коэффициенты улучшения по уровням
         /// </summary>
         [ObservableProperty]
-        private List<LevelUpgrade> levelUpgrades = [];
+        public List<LevelUpgrade> LevelUpgrades { get; set; } = new();
 
         /// <summary>
         /// Сигнатура в памяти для поиска зданий этого типа
         /// </summary>
         [ObservableProperty]
-        private byte[]? memorySignature;
+        public byte[]? MemorySignature { get; set; }
     }
 
     /// <summary>
@@ -92,13 +92,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        private int resourceId;
+        public int ResourceId { get; set; }
 
         /// <summary>
         /// Базовая скорость производства (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double baseProductionRate;
+        public double BaseProductionRate { get; set; }
     }
 
     /// <summary>
@@ -110,13 +110,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        private int resourceId;
+        public int ResourceId { get; set; }
 
         /// <summary>
         /// Базовая скорость потребления (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double baseConsumptionRate;
+        public double BaseConsumptionRate { get; set; }
     }
 
     /// <summary>
@@ -128,13 +128,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        private int resourceId;
+        public int ResourceId { get; set; }
 
         /// <summary>
         /// Требуемое количество
         /// </summary>
         [ObservableProperty]
-        private double amount;
+        public double Amount { get; set; }
     }
 
     /// <summary>
@@ -146,24 +146,24 @@ namespace CrustProductionViewer_MAUI.Models
         /// Уровень здания
         /// </summary>
         [ObservableProperty]
-        private int level;
+        public int Level { get; set; }
 
         /// <summary>
         /// Множитель скорости производства
         /// </summary>
         [ObservableProperty]
-        private double productionMultiplier;
+        public double ProductionMultiplier { get; set; }
 
         /// <summary>
         /// Множитель потребления энергии
         /// </summary>
         [ObservableProperty]
-        private double energyConsumptionMultiplier;
+        public double EnergyConsumptionMultiplier { get; set; }
 
         /// <summary>
         /// Множитель количества рабочих
         /// </summary>
         [ObservableProperty]
-        private double workersMultiplier;
+        public double WorkersMultiplier { get; set; }
     }
 }

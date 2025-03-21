@@ -13,31 +13,31 @@ namespace CrustProductionViewer_MAUI.Models
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        private int resourceId;
+        public int ResourceId { get; set; }
 
         /// <summary>
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        private string resourceName = string.Empty; // Инициализация по умолчанию
+        public string ResourceName { get; set; } = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        private string iconPath = string.Empty; // Инициализация по умолчанию
+        public string IconPath { get; set; } = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Общая скорость производства (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double totalProduction;
+        public double TotalProduction { get; set; }
 
         /// <summary>
         /// Общая скорость потребления (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        private double totalConsumption;
+        public double TotalConsumption { get; set; }
 
         /// <summary>
         /// Текущий баланс производства (производство - потребление)
@@ -55,25 +55,25 @@ namespace CrustProductionViewer_MAUI.Models
         /// Тип баланса ресурса
         /// </summary>
         [ObservableProperty]
-        private ResourceBalanceType balanceType;
+        public ResourceBalanceType BalanceType { get; set; }
 
         /// <summary>
         /// Рекомендации по оптимизации производства
         /// </summary>
         [ObservableProperty]
-        private List<BuildingRecommendation> recommendations = [];
+        public List<BuildingRecommendation> Recommendations { get; set; } = [];
 
         /// <summary>
         /// Здания, производящие этот ресурс
         /// </summary>
         [ObservableProperty]
-        private List<Building> producerBuildings = [];
+        public List<Building> ProducerBuildings { get; set; } = [];
 
         /// <summary>
         /// Здания, потребляющие этот ресурс
         /// </summary>
         [ObservableProperty]
-        private List<Building> consumerBuildings = [];
+        public List<Building> ConsumerBuildings { get; set; } = [];
 
         /// <summary>
         /// Время для исчерпания ресурса при текущем потреблении (в минутах)
@@ -173,36 +173,36 @@ namespace CrustProductionViewer_MAUI.Models
         /// Тип здания
         /// </summary>
         [ObservableProperty]
-        private string buildingType = string.Empty; // Инициализация по умолчанию
+        public string BuildingType { get; set; } = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Название здания
         /// </summary>
         [ObservableProperty]
-        private string buildingName = string.Empty; // Инициализация по умолчанию
+        public string BuildingName { get; set; } = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Рекомендуемое изменение количества зданий
         /// </summary>
         [ObservableProperty]
-        private int buildingDelta;
+        public int BuildingDelta { get; set; }
 
         /// <summary>
         /// Приоритет рекомендации (1-10, где 10 - наивысший)
         /// </summary>
         [ObservableProperty]
-        private int priority;
+        public int Priority { get; set; }
 
         /// <summary>
         /// Обоснование рекомендации
         /// </summary>
         [ObservableProperty]
-        private string justification = string.Empty; // Инициализация по умолчанию
+        public string Justification { get; set; } = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Прогнозируемая эффективность после выполнения рекомендации (в процентах)
         /// </summary>
         [ObservableProperty]
-        private double projectedEfficiency;
+        public double ProjectedEfficiency { get; set; }
     }
 }

@@ -14,37 +14,37 @@ namespace CrustProductionViewer_MAUI.Models
         /// Текущее производство
         /// </summary>
         [ObservableProperty]
-        private Production? production; // Изменено для разрешения null
+        public Production? Production { get; set; }
 
         /// <summary>
         /// Балансы ресурсов
         /// </summary>
         [ObservableProperty]
-        private List<ResourceBalance> resourceBalances = [];
+        public List<ResourceBalance> ResourceBalances { get; set; } = [];
 
         /// <summary>
         /// Конфигурации зданий
         /// </summary>
         [ObservableProperty]
-        private List<BuildingConfig> buildingConfigs = [];
+        public List<BuildingConfig> BuildingConfigs { get; set; } = [];
 
         /// <summary>
         /// Время последнего сканирования памяти
         /// </summary>
         [ObservableProperty]
-        private DateTime lastScanTime;
+        public DateTime LastScanTime { get; set; }
 
         /// <summary>
         /// Статус подключения к игре
         /// </summary>
         [ObservableProperty]
-        private bool isConnected;
+        public bool IsConnected { get; set; }
 
         /// <summary>
         /// Текущая версия игры
         /// </summary>
         [ObservableProperty]
-        private string gameVersion = string.Empty; // Инициализация пустой строкой
+        public string GameVersion { get; set; } = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Создает баланс ресурсов на основе данных о производстве
@@ -170,7 +170,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="buildingType">Тип здания</param>
         /// <returns>Конфигурация или null, если не найдена</returns>
-        public BuildingConfig? GetBuildingConfigByType(BuildingType buildingType) // Добавлен ? для явного указания возвращаемого null
+        public BuildingConfig? GetBuildingConfigByType(BuildingType buildingType)
         {
             return BuildingConfigs?.FirstOrDefault(bc => bc.BuildingType == buildingType);
         }
@@ -180,7 +180,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="buildingName">Имя здания</param>
         /// <returns>Конфигурация или null, если не найдена</returns>
-        public BuildingConfig? GetBuildingConfigByName(string buildingName) // Добавлен ? для явного указания возвращаемого null
+        public BuildingConfig? GetBuildingConfigByName(string buildingName)
         {
             return BuildingConfigs?.FirstOrDefault(bc => bc.Name == buildingName);
         }
@@ -190,7 +190,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// </summary>
         /// <param name="resourceId">ID ресурса</param>
         /// <returns>Ресурс или null, если не найден</returns>
-        public GameResource? GetResourceById(int resourceId) // Добавлен ? для явного указания возвращаемого null
+        public GameResource? GetResourceById(int resourceId)
         {
             return Production?.GetResourceById(resourceId);
         }
