@@ -12,6 +12,14 @@
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="main" />
 
+    <!-- Удалите или закомментируйте эту часть -->
+    <!--
+    <ShellContent
+        Title="Сканирование"
+        ContentTemplate="{DataTemplate views:ScanPage}"
+        Route="scan" />
+    -->
+
     <ShellContent
         Title="Калькулятор"
         ContentTemplate="{DataTemplate views:CalculatorPage}"

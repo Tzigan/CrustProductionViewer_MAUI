@@ -79,7 +79,7 @@ namespace CrustProductionViewer_MAUI.Views
                 GameStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
             }
         }
-
+        
         private async void OnScanTapped(object sender, TappedEventArgs e)
         {
             // Анимация нажатия
@@ -89,22 +89,13 @@ namespace CrustProductionViewer_MAUI.Views
             {
                 Debug.WriteLine("Создание и открытие ScanPage напрямую...");
 
-                // Получаем сервис данных из DI
-                if (_dataService != null)
-                {
-                    // Создаем страницу напрямую с передачей зависимости
-                    var scanPage = new ScanPage(_dataService);
+                // Просто используем зависимость, уже внедренную в MainPage через конструктор
+                var scanPage = new ScanPage(_dataService);
 
-                    // Переходим на созданную страницу
-                    await Navigation.PushAsync(scanPage);
+                // Переходим на созданную страницу через Navigation
+                await Navigation.PushAsync(scanPage);
 
-                    Debug.WriteLine("Переход на ScanPage выполнен успешно");
-                }
-                else
-                {
-                    Debug.WriteLine("ОШИБКА: _dataService не доступен");
-                    await DisplayAlert("Ошибка", "Сервис данных недоступен", "OK");
-                }
+                Debug.WriteLine("Переход на ScanPage выполнен успешно");
             }
             catch (Exception ex)
             {
