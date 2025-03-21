@@ -1,72 +1,75 @@
 ﻿using System;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.Globalization;
 
 namespace CrustProductionViewer_MAUI.Models
 {
     /// <summary>
     /// Представляет ресурс в игре The Crust.
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class GameResource : ObservableObject
     {
         /// <summary>
         /// Уникальный идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int Id { get; set; }
+        private int id;
 
         /// <summary>
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        public string Name { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string name = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Описание ресурса
         /// </summary>
         [ObservableProperty]
-        public string Description { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string description = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Текущее количество ресурса
         /// </summary>
         [ObservableProperty]
-        public double CurrentAmount { get; set; }
+        private double currentAmount;
 
         /// <summary>
         /// Максимальная вместимость ресурса
         /// </summary>
         [ObservableProperty]
-        public double MaxCapacity { get; set; }
+        private double maxCapacity;
 
         /// <summary>
         /// Скорость производства ресурса (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double ProductionRate { get; set; }
+        private double productionRate;
 
         /// <summary>
         /// Скорость потребления ресурса (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double ConsumptionRate { get; set; }
+        private double consumptionRate;
 
         /// <summary>
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        public string IconPath { get; set; } = string.Empty; // Инициализация пустой строкой
+        private string iconPath = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Адрес в памяти для данных этого ресурса
         /// </summary>
         [ObservableProperty]
-        public IntPtr MemoryAddress { get; set; }
+        private IntPtr memoryAddress;
 
         /// <summary>
         /// Тип ресурса (категория)
         /// </summary>
         [ObservableProperty]
-        public ResourceType ResourceType { get; set; }
+        private ResourceType resourceType;
 
         /// <summary>
         /// Вычисляет баланс производства (производство - потребление)
