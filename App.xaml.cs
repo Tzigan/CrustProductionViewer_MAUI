@@ -1,6 +1,9 @@
 ﻿using CrustProductionViewer_MAUI.Services.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 using System;
+
 
 namespace CrustProductionViewer_MAUI
 {
