@@ -6,17 +6,19 @@ namespace CrustProductionViewer_MAUI
 {
     public partial class App : Application
     {
-        private readonly WindowsMemoryService _memoryService;
+        private readonly WindowsMemoryService? _memoryService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public App(WindowsMemoryService memoryService)
+        public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
 
-            // Сохраняем ссылку на сервис памяти для освобождения ресурсов при закрытии
-            _memoryService = memoryService;
-
-            // Удаляем устаревшую инициализацию MainPage
-            // MainPage = new AppShell();
+            // Получаем сервис только на Windows-платформе
+            if (DeviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                _memoryService = _serviceProvider.GetService<WindowsMemoryService>();
+            }
         }
 
         // Переопределяем метод создания окна
@@ -26,9 +28,10 @@ namespace CrustProductionViewer_MAUI
             Window window = base.CreateWindow(activationState);
 
             // Устанавливаем AppShell как корневую страницу окна
-            window.Page = new AppShell();
+            // Используем _serviceProvider для создания AppShell с зависимостями
+            window.Page = _serviceProvider.GetService<AppShell>() ?? new AppShell();
 
-            // Подписываемся на событие закрытия окна с проверкой на null
+            // Подписываемся на событие закрытия окна
             window.Destroying += OnWindowDestroying;
 
             return window;
@@ -44,27 +47,31 @@ namespace CrustProductionViewer_MAUI
         {
             base.OnSleep();
             // Приложение переходит в фоновый режим
-            // Можно сохранить состояние или приостановить некоторые операции
         }
 
         protected override void OnResume()
         {
             base.OnResume();
             // Приложение возвращается из фонового режима
-            // Можно восстановить состояние или возобновить операции
         }
 
         // Вызывается при закрытии окна приложения
-        // Исправлено: добавлен модификатор nullable для sender
         private void OnWindowDestroying(object? sender, EventArgs e)
         {
-            // Безопасное отключение от процесса игры и освобождение ресурсов
-            if (_memoryService != null && _memoryService.IsConnected)
+            try
             {
-                _memoryService.Disconnect();
-            }
+                // Безопасное отключение от процесса игры и освобождение ресурсов
+                if (_memoryService?.IsConnected == true)
+                {
+                    _memoryService.Disconnect();
+                }
 
-            _memoryService?.Dispose();
+                _memoryService?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка при закрытии приложения: {ex.Message}");
+            }
         }
     }
 }

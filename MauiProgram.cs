@@ -5,6 +5,8 @@ using CommunityToolkit.Maui;
 using CrustProductionViewer_MAUI.Models;
 using Microsoft.Maui.LifecycleEvents;
 using CrustProductionViewer_MAUI.Services.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Devices;
 
 namespace CrustProductionViewer_MAUI
 {
@@ -45,6 +47,9 @@ namespace CrustProductionViewer_MAUI
                 LastScanTime = DateTime.MinValue
             });
 
+            // Регистрация AppShell
+            builder.Services.AddSingleton<AppShell>();
+
             // Регистрация страниц
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ScanPage>();
@@ -55,6 +60,9 @@ namespace CrustProductionViewer_MAUI
             Routing.RegisterRoute("main", typeof(MainPage));
             Routing.RegisterRoute("scan", typeof(ScanPage));
             Routing.RegisterRoute("calculator", typeof(CalculatorPage));
+
+            // Добавляем маршрут к отладочной странице
+            Routing.RegisterRoute("debug", typeof(DebugPage));
 
 #if DEBUG
             builder.Logging.AddDebug();
