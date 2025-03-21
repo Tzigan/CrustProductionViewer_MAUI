@@ -27,11 +27,12 @@ namespace CrustProductionViewer_MAUI
         protected override Window CreateWindow(IActivationState? activationState)
         {
             // Создаем новое окно напрямую вместо вызова базового метода
-            Window window = new Window();
-
-            // Устанавливаем AppShell как корневую страницу окна
-            // Используем _serviceProvider для создания AppShell с зависимостями
-            window.Page = _serviceProvider.GetService<AppShell>() ?? new AppShell();
+            Window window = new()
+            {
+                // Устанавливаем AppShell как корневую страницу окна
+                // Используем _serviceProvider для создания AppShell с зависимостями
+                Page = _serviceProvider.GetService<AppShell>() ?? new AppShell()
+            };
 
             // Подписываемся на событие закрытия окна
             window.Destroying += OnWindowDestroying;
