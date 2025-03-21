@@ -52,7 +52,10 @@ namespace CrustProductionViewer_MAUI
 
             // Регистрация страниц
             builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<ScanPage>();
+            builder.Services.AddTransient<ScanPage>(provider => {
+                var dataService = provider.GetService<ICrustDataService>();
+                return new ScanPage(dataService);
+            });
             builder.Services.AddTransient<CalculatorPage>();
             builder.Services.AddTransient<DebugPage>();
 

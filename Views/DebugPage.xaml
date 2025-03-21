@@ -119,7 +119,7 @@
                                 <ScrollView>
                                     <Label x:Name="LogOutput" 
                                            Text="Журнал пуст. Запустите операцию для вывода результатов."
-                                           FontFamily="Courier New"
+                                           FontFamily="Monospace"
                                            FontSize="12" />
                                 </ScrollView>
                             </Border>
@@ -137,7 +137,7 @@
 
                             <Entry x:Name="ResourceSignatureEntry"
                                    Placeholder="48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 48 8B 40 ??"
-                                   FontFamily="Courier New"
+                                   FontFamily="Monospace"
                                    Margin="0,0,0,10" />
 
                             <Label Text="Маска сигнатуры ресурсов:"
@@ -146,7 +146,7 @@
 
                             <Entry x:Name="ResourceMaskEntry"
                                    Placeholder="xxx????xxx?xxx?"
-                                   FontFamily="Courier New"
+                                   FontFamily="Monospace"
                                    Margin="0,0,0,10" />
 
                             <Button Text="Тестировать сигнатуру ресурсов" 
@@ -160,7 +160,7 @@
 
                             <Entry x:Name="BuildingSignatureEntry"
                                    Placeholder="48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 41 ??"
-                                   FontFamily="Courier New"
+                                   FontFamily="Monospace"
                                    Margin="0,0,0,10" />
 
                             <Label Text="Маска сигнатуры строений:"
@@ -169,7 +169,7 @@
 
                             <Entry x:Name="BuildingMaskEntry"
                                    Placeholder="xxx????xxx?xxx?"
-                                   FontFamily="Courier New"
+                                   FontFamily="Monospace"
                                    Margin="0,0,0,10" />
 
                             <Button Text="Тестировать сигнатуру строений" 
@@ -189,7 +189,7 @@
                                 <ScrollView>
                                     <Label x:Name="SignatureResults" 
                                            Text="Тестирование сигнатур не выполнялось."
-                                           FontFamily="Courier New"
+                                           FontFamily="Monospace"
                                            FontSize="12" />
                                 </ScrollView>
                             </Border>
@@ -207,7 +207,7 @@
 
                             <Entry x:Name="AddressEntry"
                                    Placeholder="0x12AB34CD"
-                                   FontFamily="Courier New"
+                                   FontFamily="Monospace"
                                    Margin="0,0,0,10" />
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
@@ -265,7 +265,7 @@
                                 <ScrollView>
                                     <Label x:Name="StructureResults" 
                                            Text="Чтение структуры не выполнялось."
-                                           FontFamily="Courier New"
+                                           FontFamily="Monospace"
                                            FontSize="12" />
                                 </ScrollView>
                             </Border>
