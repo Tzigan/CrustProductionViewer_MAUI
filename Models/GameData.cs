@@ -16,37 +16,37 @@ namespace CrustProductionViewer_MAUI.Models
         /// Текущее производство
         /// </summary>
         [ObservableProperty]
-        partial Production? production;
+        private Production? production;
 
         /// <summary>
         /// Балансы ресурсов
         /// </summary>
         [ObservableProperty]
-        partial List<ResourceBalance> resourceBalances = [];
+        private List<ResourceBalance> resourceBalances = [];
 
         /// <summary>
         /// Конфигурации зданий
         /// </summary>
         [ObservableProperty]
-        partial List<BuildingConfig> buildingConfigs = [];
+        private List<BuildingConfig> buildingConfigs = [];
 
         /// <summary>
         /// Время последнего сканирования памяти
         /// </summary>
         [ObservableProperty]
-        partial DateTime lastScanTime;
+        private DateTime lastScanTime;
 
         /// <summary>
         /// Статус подключения к игре
         /// </summary>
         [ObservableProperty]
-        partial bool isConnected;
+        private bool isConnected;
 
         /// <summary>
         /// Текущая версия игры
         /// </summary>
         [ObservableProperty]
-        partial string gameVersion = string.Empty; // Инициализация пустой строкой
+        private string gameVersion = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Создает баланс ресурсов на основе данных о производстве
@@ -56,10 +56,10 @@ namespace CrustProductionViewer_MAUI.Models
         {
             List<ResourceBalance> balances = [];
 
-            if (Production == null || Production.Resources == null)
+            if (production == null || production.Resources == null)
                 return balances;
 
-            foreach (var resource in Production.Resources)
+            foreach (var resource in production.Resources)
             {
                 var balance = new ResourceBalance
                 {
@@ -97,10 +97,10 @@ namespace CrustProductionViewer_MAUI.Models
                 }
 
                 // Находим здания, производящие этот ресурс
-                balance.ProducerBuildings = [.. Production.Buildings.Where(b => b.ProducedResources.Any(pr => pr.ResourceId == resource.Id))];
+                balance.ProducerBuildings = [.. production.Buildings.Where(b => b.ProducedResources.Any(pr => pr.ResourceId == resource.Id))];
 
                 // Находим здания, потребляющие этот ресурс
-                balance.ConsumerBuildings = [.. Production.Buildings.Where(b => b.ConsumedResources.Any(cr => cr.ResourceId == resource.Id))];
+                balance.ConsumerBuildings = [.. production.Buildings.Where(b => b.ConsumedResources.Any(cr => cr.ResourceId == resource.Id))];
 
                 // Добавляем рекомендации, если есть дефицит
                 if (balance.BalanceType == ResourceBalanceType.SlightDeficit ||
@@ -122,11 +122,11 @@ namespace CrustProductionViewer_MAUI.Models
         private void GenerateRecommendations(ResourceBalance balance)
         {
             // Если нет конфигураций зданий, не можем генерировать рекомендации
-            if (BuildingConfigs == null || BuildingConfigs.Count == 0)
+            if (buildingConfigs == null || buildingConfigs.Count == 0)
                 return;
 
             // Найдем все типы зданий, которые могут производить этот ресурс
-            var producerConfigs = BuildingConfigs
+            var producerConfigs = buildingConfigs
                 .Where(bc => bc.ProducedResources.Any(pr => pr.ResourceId == balance.ResourceId))
                 .ToList();
 
@@ -174,7 +174,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// <returns>Конфигурация или null, если не найдена</returns>
         public BuildingConfig? GetBuildingConfigByType(BuildingType buildingType)
         {
-            return BuildingConfigs?.FirstOrDefault(bc => bc.BuildingType == buildingType);
+            return buildingConfigs?.FirstOrDefault(bc => bc.BuildingType == buildingType);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// <returns>Конфигурация или null, если не найдена</returns>
         public BuildingConfig? GetBuildingConfigByName(string buildingName)
         {
-            return BuildingConfigs?.FirstOrDefault(bc => bc.Name == buildingName);
+            return buildingConfigs?.FirstOrDefault(bc => bc.Name == buildingName);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace CrustProductionViewer_MAUI.Models
         /// <returns>Ресурс или null, если не найден</returns>
         public GameResource? GetResourceById(int resourceId)
         {
-            return Production?.GetResourceById(resourceId);
+            return production?.GetResourceById(resourceId);
         }
     }
 }
