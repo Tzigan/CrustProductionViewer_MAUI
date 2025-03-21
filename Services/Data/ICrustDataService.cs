@@ -10,8 +10,6 @@ namespace CrustProductionViewer_MAUI.Services.Data
     /// </summary>
     public interface ICrustDataService
     {
-
-        Task<GameData> RefreshDataAsync(IProgress<ScanProgress> progress);
         /// <summary>
         /// Получает информацию о состоянии подключения к игре
         /// </summary>
@@ -43,8 +41,9 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// <summary>
         /// Обновляет данные о текущем состоянии игры, используя ранее найденные адреса
         /// </summary>
+        /// <param name="progress">Опциональный параметр для отслеживания прогресса обновления</param>
         /// <returns>Объект GameData с обновленной информацией</returns>
-        Task<GameData> RefreshDataAsync();
+        Task<GameData> RefreshDataAsync(IProgress<ScanProgress>? progress = null);
 
         /// <summary>
         /// Получает текущие данные игры
@@ -69,7 +68,6 @@ namespace CrustProductionViewer_MAUI.Services.Data
         /// Очищает кэш адресов в памяти
         /// </summary>
         void ClearAddressCache();
-
     }
 
     /// <summary>
