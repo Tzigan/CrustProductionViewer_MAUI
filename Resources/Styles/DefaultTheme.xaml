@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- ����� -->
+    <!-- Цвета -->
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryDark">#3700B3</Color>
     <Color x:Key="Secondary">#6B7280</Color>
@@ -15,15 +15,15 @@
     <Color x:Key="Warning">#D97706</Color>
     <Color x:Key="Danger">#DC2626</Color>
 
-    <!-- ����� ��� ������� -->
+    <!-- Стиль для границы -->
     <Style TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark=#262626}" />
         <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
-        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10" />
         <Setter Property="Padding" Value="15" />
     </Style>
 
-    <!-- ����� ��� ���������� -->
+    <!-- Стиль для заголовков -->
     <Style TargetType="Label" x:Key="Header">
         <Setter Property="FontSize" Value="24" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark=White}" />
@@ -32,7 +32,7 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <!-- ����� ��� ������������� -->
+    <!-- Стиль для подзаголовков -->
     <Style TargetType="Label" x:Key="Subheader">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextSecondary}, Dark=#E5E7EB}" />
@@ -40,7 +40,7 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <!-- ����� ��� �������� ������ -->
+    <!-- Стиль для основного текста -->
     <Style TargetType="Label" x:Key="BodyText">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark=White}" />
@@ -48,7 +48,7 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <!-- ����� ��� ������ ���������� ������� -->
+    <!-- Стиль для мелкого дополнительного текста -->
     <Style TargetType="Label" x:Key="SmallText">
         <Setter Property="FontSize" Value="12" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextSecondary}, Dark=#9CA3AF}" />
@@ -56,7 +56,7 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <!-- ����� ��� ������ -->
+    <!-- Стиль для кнопок -->
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
         <Setter Property="TextColor" Value="White" />
@@ -66,22 +66,22 @@
         <Setter Property="MinimumHeightRequest" Value="44" />
     </Style>
 
-    <!-- ����� ��� �������� ������ -->
+    <!-- Стиль для успешных кнопок -->
     <Style TargetType="Button" x:Key="SuccessButton" BasedOn="{StaticResource Key={x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Success}, Dark=#065F46}" />
     </Style>
 
-    <!-- ����� ��� ������ � ��������������� -->
+    <!-- Стиль для кнопок с предупреждением -->
     <Style TargetType="Button" x:Key="WarningButton" BasedOn="{StaticResource Key={x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Warning}, Dark=#92400E}" />
     </Style>
 
-    <!-- ����� ��� ������� ������ -->
+    <!-- Стиль для опасных кнопок -->
     <Style TargetType="Button" x:Key="DangerButton" BasedOn="{StaticResource Key={x:Type Button}}">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Danger}, Dark=#991B1B}" />
     </Style>
 
-    <!-- ����� ��� ����� ����� -->
+    <!-- Стиль для полей ввода -->
     <Style TargetType="Entry">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark=White}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=White, Dark=#374151}" />
@@ -89,7 +89,7 @@
         <Setter Property="FontSize" Value="16" />
     </Style>
 
-    <!-- ����� ��� ���������� �������� -->
+    <!-- Стиль для индикатора загрузки -->
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
         <Setter Property="HorizontalOptions" Value="Center" />

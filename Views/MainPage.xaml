@@ -85,8 +85,14 @@
                 <!-- Анализ производства -->
                 <Border Grid.Row="0" Grid.Column="1"
                        StrokeShape="RoundRectangle 10"
-                       Stroke="{DynamicResource Primary}"
-                       Shadow="True">
+                       Stroke="{DynamicResource Primary}">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="3,3"
+                                Radius="10"
+                                Opacity="0.3" />
+                    </Border.Shadow>
+
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnProductionTapped"/>
                     </Border.GestureRecognizers>
@@ -112,8 +118,14 @@
                 <!-- Калькулятор эффективности -->
                 <Border Grid.Row="1" Grid.Column="0"
                        StrokeShape="RoundRectangle 10"
-                       Stroke="{DynamicResource Primary}"
-                       Shadow="True">
+                       Stroke="{DynamicResource Primary}">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="3,3"
+                                Radius="10"
+                                Opacity="0.3" />
+                    </Border.Shadow>
+
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnCalculatorTapped"/>
                     </Border.GestureRecognizers>
@@ -139,8 +151,14 @@
                 <!-- Настройки -->
                 <Border Grid.Row="1" Grid.Column="1"
                        StrokeShape="RoundRectangle 10"
-                       Stroke="{DynamicResource Primary}"
-                       Shadow="True">
+                       Stroke="{DynamicResource Primary}">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="3,3"
+                                Radius="10"
+                                Opacity="0.3" />
+                    </Border.Shadow>
+
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnSettingsTapped"/>
                     </Border.GestureRecognizers>
