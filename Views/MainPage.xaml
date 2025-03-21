@@ -55,12 +55,14 @@
 
                 <!-- Сканирование памяти -->
                 <Border Grid.Row="0" Grid.Column="0"
-                       StrokeShape="RoundRectangle 10"
-                       Stroke="{DynamicResource Primary}"
-                       Shadow="True">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnScanTapped"/>
-                    </Border.GestureRecognizers>
+                        StrokeShape="RoundRectangle 10"
+                        Stroke="{DynamicResource Primary}">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="3,3"
+                                Radius="10"
+                                Opacity="0.3" />
+                    </Border.Shadow>
 
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <Image Source="app_scan_icon.png"
