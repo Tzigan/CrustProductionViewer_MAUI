@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Resources;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -8,37 +9,38 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Представляет общую информацию о производстве в игре
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class Production : ObservableObject
     {
         /// <summary>
         /// Время последнего обновления данных
         /// </summary>
         [ObservableProperty]
-        public DateTime LastUpdated { get; set; }
+        private DateTime lastUpdated;
 
         /// <summary>
         /// Список всех ресурсов в игре
         /// </summary>
         [ObservableProperty]
-        public List<GameResource> Resources { get; set; } = [];
+        private List<GameResource> resources = [];
 
         /// <summary>
         /// Список всех строений в игре
         /// </summary>
         [ObservableProperty]
-        public List<Building> Buildings { get; set; } = [];
+        private List<Building> buildings = [];
 
         /// <summary>
         /// Общая потребляемая энергия
         /// </summary>
         [ObservableProperty]
-        public double TotalEnergyConsumption { get; set; }
+        private double totalEnergyConsumption;
 
         /// <summary>
         /// Общая производимая энергия
         /// </summary>
         [ObservableProperty]
-        public double TotalEnergyProduction { get; set; }
+        private double totalEnergyProduction;
 
         /// <summary>
         /// Баланс энергии (производство - потребление)
@@ -54,13 +56,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// Общее количество работников
         /// </summary>
         [ObservableProperty]
-        public int TotalWorkers { get; set; }
+        private int totalWorkers;
 
         /// <summary>
         /// Максимальная вместимость работников
         /// </summary>
         [ObservableProperty]
-        public int MaxWorkers { get; set; }
+        private int maxWorkers;
 
         /// <summary>
         /// Получает ресурс по его ID
