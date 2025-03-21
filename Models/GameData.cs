@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -8,43 +9,44 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Представляет все данные игры The Crust
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class GameData : ObservableObject
     {
         /// <summary>
         /// Текущее производство
         /// </summary>
         [ObservableProperty]
-        public Production? Production { get; set; }
+        partial Production? production;
 
         /// <summary>
         /// Балансы ресурсов
         /// </summary>
         [ObservableProperty]
-        public List<ResourceBalance> ResourceBalances { get; set; } = [];
+        partial List<ResourceBalance> resourceBalances = [];
 
         /// <summary>
         /// Конфигурации зданий
         /// </summary>
         [ObservableProperty]
-        public List<BuildingConfig> BuildingConfigs { get; set; } = [];
+        partial List<BuildingConfig> buildingConfigs = [];
 
         /// <summary>
         /// Время последнего сканирования памяти
         /// </summary>
         [ObservableProperty]
-        public DateTime LastScanTime { get; set; }
+        partial DateTime lastScanTime;
 
         /// <summary>
         /// Статус подключения к игре
         /// </summary>
         [ObservableProperty]
-        public bool IsConnected { get; set; }
+        partial bool isConnected;
 
         /// <summary>
         /// Текущая версия игры
         /// </summary>
         [ObservableProperty]
-        public string GameVersion { get; set; } = string.Empty; // Инициализация пустой строкой
+        partial string gameVersion = string.Empty; // Инициализация пустой строкой
 
         /// <summary>
         /// Создает баланс ресурсов на основе данных о производстве
