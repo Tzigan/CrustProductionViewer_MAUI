@@ -141,7 +141,7 @@ namespace CrustProductionViewer_MAUI.Views
                 try
                 {
                     // ѕопытка перейти на страницу отладки
-                    await Shell.Current.GoToAsync("//debug");
+                    await Shell.Current.GoToAsync("debug");
                 }
                 catch (Exception ex)
                 {
