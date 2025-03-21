@@ -44,7 +44,13 @@ namespace CrustProductionViewer_MAUI.Models
         /// <summary>
         /// Текущий баланс производства (производство - потребление)
         /// </summary>
-        public double CurrentBalance => TotalProduction - TotalConsumption;
+        public double CurrentBalance
+        {
+            get
+            {
+                return TotalProduction - TotalConsumption;
+            }
+        }
 
         /// <summary>
         /// Процентное соотношение производства к потреблению
