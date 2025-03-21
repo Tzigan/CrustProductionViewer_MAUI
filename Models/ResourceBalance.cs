@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CrustProductionViewer_MAUI.Models
@@ -7,37 +8,38 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Представляет баланс ресурсов и рекомендации по оптимизации
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class ResourceBalance : ObservableObject
     {
         /// <summary>
         /// Идентификатор ресурса
         /// </summary>
         [ObservableProperty]
-        public int ResourceId { get; set; }
+        private int resourceId;
 
         /// <summary>
         /// Название ресурса
         /// </summary>
         [ObservableProperty]
-        public string ResourceName { get; set; } = string.Empty; // Инициализация по умолчанию
+        private string resourceName = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Путь к иконке ресурса
         /// </summary>
         [ObservableProperty]
-        public string IconPath { get; set; } = string.Empty; // Инициализация по умолчанию
+        private string iconPath = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Общая скорость производства (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double TotalProduction { get; set; }
+        private double totalProduction;
 
         /// <summary>
         /// Общая скорость потребления (единиц в минуту)
         /// </summary>
         [ObservableProperty]
-        public double TotalConsumption { get; set; }
+        private double totalConsumption;
 
         /// <summary>
         /// Текущий баланс производства (производство - потребление)
@@ -55,25 +57,25 @@ namespace CrustProductionViewer_MAUI.Models
         /// Тип баланса ресурса
         /// </summary>
         [ObservableProperty]
-        public ResourceBalanceType BalanceType { get; set; }
+        private ResourceBalanceType balanceType;
 
         /// <summary>
         /// Рекомендации по оптимизации производства
         /// </summary>
         [ObservableProperty]
-        public List<BuildingRecommendation> Recommendations { get; set; } = [];
+        private List<BuildingRecommendation> recommendations = [];
 
         /// <summary>
         /// Здания, производящие этот ресурс
         /// </summary>
         [ObservableProperty]
-        public List<Building> ProducerBuildings { get; set; } = [];
+        private List<Building> producerBuildings = [];
 
         /// <summary>
         /// Здания, потребляющие этот ресурс
         /// </summary>
         [ObservableProperty]
-        public List<Building> ConsumerBuildings { get; set; } = [];
+        private List<Building> consumerBuildings = [];
 
         /// <summary>
         /// Время для исчерпания ресурса при текущем потреблении (в минутах)
@@ -167,42 +169,43 @@ namespace CrustProductionViewer_MAUI.Models
     /// <summary>
     /// Рекомендация по изменению количества зданий
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public partial class BuildingRecommendation : ObservableObject
     {
         /// <summary>
         /// Тип здания
         /// </summary>
         [ObservableProperty]
-        public string BuildingType { get; set; } = string.Empty; // Инициализация по умолчанию
+        private string buildingType = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Название здания
         /// </summary>
         [ObservableProperty]
-        public string BuildingName { get; set; } = string.Empty; // Инициализация по умолчанию
+        private string buildingName = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Рекомендуемое изменение количества зданий
         /// </summary>
         [ObservableProperty]
-        public int BuildingDelta { get; set; }
+        private int buildingDelta;
 
         /// <summary>
         /// Приоритет рекомендации (1-10, где 10 - наивысший)
         /// </summary>
         [ObservableProperty]
-        public int Priority { get; set; }
+        private int priority;
 
         /// <summary>
         /// Обоснование рекомендации
         /// </summary>
         [ObservableProperty]
-        public string Justification { get; set; } = string.Empty; // Инициализация по умолчанию
+        private string justification = string.Empty; // Инициализация по умолчанию
 
         /// <summary>
         /// Прогнозируемая эффективность после выполнения рекомендации (в процентах)
         /// </summary>
         [ObservableProperty]
-        public double ProjectedEfficiency { get; set; }
+        private double projectedEfficiency;
     }
 }
