@@ -4,80 +4,71 @@
              x:Class="CrustProductionViewer_MAUI.Views.ScanPage"
              Title="Сканирование памяти">
 
-    <Grid RowDefinitions="Auto,*" Padding="20">
-        <VerticalStackLayout Grid.Row="0" Spacing="10">
-            <Label Text="Сканирование памяти игры"
-                   FontSize="28"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,10"/>
+    <Grid RowDefinitions="Auto,*,Auto" 
+          Padding="20"
+          RowSpacing="15">
 
-            <!-- Замена Frame на Border -->
-            <Border StrokeShape="RoundRectangle 8"
-                   Stroke="{StaticResource Primary}"
-                   Padding="15"
-                   Margin="0,0,0,20">
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+        <!-- Верхняя часть страницы: Статус подключения -->
+        <Border StrokeShape="RoundRectangle 8"
+                Stroke="{AppThemeBinding Light=#512BD4, Dark=#7B5FF5}"
+                StrokeThickness="1"
+                Padding="15"
+                Grid.Row="0">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
                     <Label x:Name="ConnectionStatusLabel" 
-                           Grid.Column="0"
-                           Text="Процесс The Crust не найден"
+                           Text="Статус подключения: неизвестно"
                            FontSize="16"
-                           VerticalOptions="Center"
-                           TextColor="{StaticResource Danger}"/>
+                           VerticalOptions="Center" />
 
-                    <Button x:Name="ConnectButton"
-                            Grid.Column="1"
-                            Text="Подключиться"
-                            Clicked="OnConnectClicked"
-                            VerticalOptions="Center"/>
-                </Grid>
-            </Border>
+                    <Label x:Name="ScanStatusLabel"
+                           Text="Статус сканирования"
+                           FontSize="14"
+                           TextColor="Gray"
+                           VerticalOptions="Center" />
+                </VerticalStackLayout>
 
-            <Button x:Name="ScanButton"
-                    Text="Сканировать память"
-                    IsEnabled="False"
-                    Clicked="OnScanClicked"
-                    HorizontalOptions="Center"
-                    Margin="0,0,0,10"/>
+                <Button x:Name="ConnectButton"
+                        Grid.Column="1"
+                        Text="Подключиться"
+                        Clicked="OnConnectClicked"
+                        VerticalOptions="Center" />
+            </Grid>
+        </Border>
 
-            <Label x:Name="ScanStatusLabel"
-                   Text="Для начала сканирования подключитесь к игре"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource Secondary}"
-                   FontSize="14"/>
-        </VerticalStackLayout>
-
+        <!-- Средняя часть страницы: Результаты и контент -->
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Spacing="15" Padding="0,20,0,0">
-                <Label Text="Результаты сканирования"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       Margin="0,0,0,10"/>
-
-                <!-- Здесь будут отображаться результаты сканирования -->
-                <Label x:Name="ResultsLabel"
-                       Text="Нет данных. Выполните сканирование."
-                       TextColor="{StaticResource Secondary}"/>
-
+            <VerticalStackLayout Spacing="20" Padding="0,10">
+                <!-- Индикатор сканирования -->
                 <ActivityIndicator x:Name="ScanningIndicator"
-                                   IsRunning="False"
-                                   IsVisible="False"
-                                   HeightRequest="50"
-                                   WidthRequest="50"
-                                   Margin="0,20,0,0"/>
+                                  IsRunning="False"
+                                  IsVisible="False"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Center"/>
 
-                <VerticalStackLayout x:Name="ResourcesStack"
-                                     IsVisible="False"
-                                     Spacing="10">
-                    <!-- Здесь будут динамически добавляться элементы для ресурсов -->
-                </VerticalStackLayout>
+                <!-- Метка результатов сканирования -->
+                <Label x:Name="ResultsLabel"
+                       Text="Выполните сканирование, чтобы увидеть результаты."
+                       IsVisible="True"
+                       HorizontalOptions="Center" />
 
-                <VerticalStackLayout x:Name="BuildingsStack"
-                                     IsVisible="False"
-                                     Spacing="10">
-                    <!-- Здесь будут динамически добавляться элементы для зданий -->
-                </VerticalStackLayout>
+                <!-- Контейнер для отображения ресурсов -->
+                <VerticalStackLayout x:Name="ResourcesStack" 
+                                    IsVisible="False"
+                                    Spacing="5" />
+
+                <!-- Контейнер для отображения зданий -->
+                <VerticalStackLayout x:Name="BuildingsStack" 
+                                    IsVisible="False"
+                                    Spacing="5" />
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Нижняя часть страницы: Кнопка сканирования -->
+        <Button x:Name="ScanButton"
+                Text="Сканировать память"
+                IsEnabled="False"
+                Clicked="OnScanClicked"
+                Grid.Row="2"/>
     </Grid>
 </ContentPage>
-

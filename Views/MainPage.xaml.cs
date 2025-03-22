@@ -33,10 +33,7 @@ namespace CrustProductionViewer_MAUI.Views
             {
                 // Если TitleLabel не найден, добавляем жест к первой метке на странице
                 var firstLabel = this.FindByName<Label>("VersionLabel");
-                if (firstLabel != null)
-                {
-                    firstLabel.GestureRecognizers.Add(titleTapGesture);
-                }
+                firstLabel?.GestureRecognizers.Add(titleTapGesture);
             }
         }
 

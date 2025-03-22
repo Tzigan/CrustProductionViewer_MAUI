@@ -5,6 +5,7 @@ using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CrustProductionViewer_MAUI.Views
 {
@@ -316,15 +317,15 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-        {
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-        },
+                {
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+                },
                 RowDefinitions =
-        {
-            new RowDefinition { Height = GridLength.Auto },
-            new RowDefinition { Height = GridLength.Auto }
-        }
+                {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                }
             };
 
             var nameLabel = new Label
@@ -378,16 +379,16 @@ namespace CrustProductionViewer_MAUI.Views
             var grid = new Grid
             {
                 ColumnDefinitions =
-        {
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-            new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-        },
+                {
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+                },
                 RowDefinitions =
-        {
-            new RowDefinition { Height = GridLength.Auto },
-            new RowDefinition { Height = GridLength.Auto },
-            new RowDefinition { Height = GridLength.Auto }
-        }
+                {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Auto }
+                }
             };
 
             var nameLabel = new Label
@@ -427,11 +428,6 @@ namespace CrustProductionViewer_MAUI.Views
 
             border.Content = grid;
             return border;
-        }
-
-        internal void LoadContent()
-        {
-            throw new NotImplementedException();
         }
     }
 }
