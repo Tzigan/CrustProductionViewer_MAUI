@@ -3,41 +3,36 @@ using CrustProductionViewer_MAUI.Services.Data;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using System;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace CrustProductionViewer_MAUI.Views
 {
     public partial class ScanPage : ContentPage
     {
-        private ICrustDataService? _dataService;
+        private readonly ICrustDataService? _dataService;
         private bool _isScanningActive = false;
 
-        // Конструктор без параметров для XAML
         public ScanPage()
         {
             InitializeComponent();
+
             try
             {
-                // Даже если не найдет сервис, страница будет открыта
-                var dataService = Application.Current?.Handler?.MauiContext?.Services.GetService<ICrustDataService>();
-                if (dataService != null)
+                // Получаем сервис из контейнера DI
+                _dataService = Application.Current?.Handler?.MauiContext?.Services?.GetService<ICrustDataService>();
+
+                if (_dataService == null)
                 {
-                    _dataService = dataService;
-                }
-                else
-                {
-                    Debug.WriteLine("ICrustDataService не найден в DI контейнере");
+                    Debug.WriteLine("ВНИМАНИЕ: ICrustDataService не найден в контейнере DI");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ошибка в конструкторе ScanPage: {ex.Message}");
+                Debug.WriteLine($"Ошибка получения ICrustDataService: {ex.Message}");
             }
         }
 
-        // Существующий конструктор с параметром
         public ScanPage(ICrustDataService dataService)
         {
             InitializeComponent();
@@ -177,7 +172,7 @@ namespace CrustProductionViewer_MAUI.Views
                 var gameData = await _dataService.ScanDataAsync(progress);
 
                 // Отображаем результаты
-                if (gameData != null && (gameData.Production?.Resources?.Count > 0 || gameData.Production?.Buildings?.Count > 0)) // Исправлено CS8602
+                if (gameData != null && (gameData.Production?.Resources?.Count > 0 || gameData.Production?.Buildings?.Count > 0))
                 {
                     ResultsLabel.Text = $"Сканирование завершено. Найдено: {gameData.Production?.Resources?.Count ?? 0} ресурсов, {gameData.Production?.Buildings?.Count ?? 0} зданий";
 
@@ -231,13 +226,12 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        // Изменено с async Task на void, так как нет операций await
         private void DisplayResources(GameData gameData)
         {
             // Очищаем контейнер
             ResourcesStack.Children.Clear();
 
-            if (gameData?.Production?.Resources != null && gameData.Production.Resources.Count > 0) // Исправлено CS8602
+            if (gameData?.Production?.Resources != null && gameData.Production.Resources.Count > 0)
             {
                 ResourcesStack.IsVisible = true;
 
@@ -266,13 +260,12 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        // Изменено с async Task на void, так как нет операций await
         private void DisplayBuildings(GameData gameData)
         {
             // Очищаем контейнер
             BuildingsStack.Children.Clear();
 
-            if (gameData?.Production?.Buildings != null && gameData.Production.Buildings.Count > 0) // Исправлено CS8602
+            if (gameData?.Production?.Buildings != null && gameData.Production.Buildings.Count > 0)
             {
                 BuildingsStack.IsVisible = true;
 

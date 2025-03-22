@@ -76,31 +76,22 @@ namespace CrustProductionViewer_MAUI.Views
                 GameStatusLabel.TextColor = Color.FromArgb("#FFDC2626"); // Danger color
             }
         }
-        
+
         private async void OnScanTapped(object sender, TappedEventArgs e)
         {
-            // Анимация нажатия
             await AnimateButtonTap(sender);
 
             try
             {
-                Debug.WriteLine("Создание и открытие ScanPage напрямую...");
-
-                // Просто используем зависимость, уже внедренную в MainPage через конструктор
+                // Создаем экземпляр страницы напрямую, используя сервис данных
                 var scanPage = new ScanPage(_dataService);
 
-                // Переходим на созданную страницу через Navigation
+                // Используем стандартную навигацию MAUI
                 await Navigation.PushAsync(scanPage);
-
-                Debug.WriteLine("Переход на ScanPage выполнен успешно");
             }
             catch (Exception ex)
             {
-                // Логирование ошибки
-                Debug.WriteLine($"Ошибка при создании и открытии ScanPage: {ex.Message}");
-                Debug.WriteLine($"Стек вызовов: {ex.StackTrace}");
-
-                // Информируем пользователя
+                Debug.WriteLine($"Ошибка при переходе на страницу сканирования: {ex.Message}");
                 await DisplayAlert("Ошибка", $"Не удалось открыть страницу сканирования: {ex.Message}", "OK");
             }
         }

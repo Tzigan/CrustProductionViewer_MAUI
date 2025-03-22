@@ -16,6 +16,9 @@ namespace CrustProductionViewer_MAUI.Views
 {
     public partial class DebugPage : ContentPage
     {
+        // Статические JsonSerializerOptions для повторного использования (исправление CA1869)
+        private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
+
         private readonly ICrustDataService _dataService;
         private readonly WindowsMemoryService _memoryService;
         private GameData _lastScanData;
@@ -251,8 +254,8 @@ namespace CrustProductionViewer_MAUI.Views
 
                 string filePath = Path.Combine(folderPath, fileName);
 
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string json = JsonSerializer.Serialize(_lastScanData, options);
+                // Используем статический экземпляр JsonSerializerOptions (исправление CA1869)
+                string json = JsonSerializer.Serialize(_lastScanData, _jsonOptions);
                 await File.WriteAllTextAsync(filePath, json);
 
                 AppendToLog($"Результаты сохранены в: {filePath}");
@@ -307,7 +310,7 @@ namespace CrustProductionViewer_MAUI.Views
                 }
                 else
                 {
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder(); // Упрощено (исправление IDE0090)
                     sb.AppendLine($"Найдено совпадений: {results.Count}");
 
                     int maxToShow = Math.Min(results.Count, 10);
@@ -386,7 +389,7 @@ namespace CrustProductionViewer_MAUI.Views
                 }
                 else
                 {
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder(); // Упрощено (исправление IDE0090)
                     sb.AppendLine($"Найдено совпадений: {results.Count}");
 
                     int maxToShow = Math.Min(results.Count, 10);
@@ -446,7 +449,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string? addressText = AddressEntry.Text?.Trim();  // Используем string? вместо string
+            string? addressText = AddressEntry.Text?.Trim();
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -462,7 +465,7 @@ namespace CrustProductionViewer_MAUI.Views
                 IntPtr address;
                 if (addressText.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
                 {
-                    address = new IntPtr(Convert.ToInt64(addressText.Substring(2), 16));
+                    address = new IntPtr(Convert.ToInt64(addressText[2..], 16)); // Использование диапазона вместо Substring (исправление IDE0057)
                 }
                 else
                 {
@@ -475,7 +478,7 @@ namespace CrustProductionViewer_MAUI.Views
                     MemoryAddress = address
                 };
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder(); // Упрощено (исправление IDE0090)
                 sb.AppendLine($"Чтение ресурса по адресу: 0x{address.ToInt64():X}\n");
 
                 // Читаем ID
@@ -574,7 +577,7 @@ namespace CrustProductionViewer_MAUI.Views
         {
             if (!EnsureConnected() || _isBusy) return;
 
-            string? addressText = AddressEntry.Text?.Trim();  // Используем string? вместо string
+            string? addressText = AddressEntry.Text?.Trim();
             if (string.IsNullOrEmpty(addressText))
             {
                 await DisplayAlert("Ошибка", "Введите адрес для чтения", "OK");
@@ -639,7 +642,7 @@ namespace CrustProductionViewer_MAUI.Views
             }
         }
 
-        private void SetBusy(bool isBusy, string? statusMessage = null)  // Добавляем ? к типу string
+        private void SetBusy(bool isBusy, string? statusMessage = null)
         {
             _isBusy = isBusy;
             BusyIndicator.IsRunning = isBusy;
@@ -666,9 +669,10 @@ namespace CrustProductionViewer_MAUI.Views
             return true;
         }
 
-        private string ByteArrayToHexString(byte[] bytes)
+        // Добавлен модификатор static (исправление CA1822)
+        private static string ByteArrayToHexString(byte[] bytes)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder(); // Упрощено (исправление IDE0090)
             for (int i = 0; i < bytes.Length; i++)
             {
                 sb.Append(bytes[i].ToString("X2"));
@@ -680,7 +684,8 @@ namespace CrustProductionViewer_MAUI.Views
             return sb.ToString();
         }
 
-        private byte[] HexStringToByteArray(string hex)
+        // Добавлен модификатор static (исправление CA1822)
+        private static byte[] HexStringToByteArray(string hex)
         {
             // Удаляем все пробелы
             hex = hex.Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("\n", "");
@@ -694,7 +699,7 @@ namespace CrustProductionViewer_MAUI.Views
             byte[] bytes = new byte[hex.Length / 2];
             for (int i = 0; i < hex.Length; i += 2)
             {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                bytes[i / 2] = Convert.ToByte(hex[i..(i + 2)], 16); // Использование диапазона вместо Substring (исправление IDE0057)
             }
 
             return bytes;
@@ -712,14 +717,15 @@ namespace CrustProductionViewer_MAUI.Views
             return new IntPtr(absoluteAddress);
         }
 
-        private int ConvertHexOffsetToInt(string hexOffset)
+        // Добавлен модификатор static (исправление CA1822)
+        private static int ConvertHexOffsetToInt(string hexOffset)
         {
             if (string.IsNullOrEmpty(hexOffset))
                 return 0;
 
             if (hexOffset.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
             {
-                return Convert.ToInt32(hexOffset.Substring(2), 16);
+                return Convert.ToInt32(hexOffset[2..], 16); // Использование диапазона вместо Substring (исправление IDE0057)
             }
             else
             {
